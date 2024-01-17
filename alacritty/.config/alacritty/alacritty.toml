@@ -1,0 +1,41 @@
+import = [
+    #"~/.config/alacritty/catppuccin/catppuccin-latte.toml"
+    #"~/.config/alacritty/catppuccin/catppuccin-frappe.toml"
+    "~/.config/alacritty/catppuccin/catppuccin-macchiato.toml"
+    #"~/.config/alacritty/catppuccin/catppuccin-mocha.toml"
+]
+
+[font]
+size = 13.0
+
+[font.normal]
+family = "MonoLisa Nerd Font"
+style = "Light Regular"
+
+[font.italic]
+family = "MonoLisa Nerd Font"
+style = "Light Italic"
+
+[font.bold]
+family = "MonoLisa Nerd Font"
+style = "Medium Regular"
+
+[font.bold_italic]
+family = "MonoLisa Nerd Font"
+style = "Medium Italic"
+
+[font.glyph_offset]
+x = 0
+y = 6
+
+[font.offset]
+x = 0
+y = 6
+
+[window]
+decorations = "full"
+opacity = 0.9
+
+[window.padding]
+x = 8
+y = 4
