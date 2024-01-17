@@ -14,7 +14,12 @@ vim.opt.rtp:prepend(lazypath)
 
 -- Load core config & plugins
 require("core")
-require("lazy").setup("plugins")
+require("lazy").setup({
+    ui = { border = "single" },
+    spec = {
+        { import = "plugins" },
+    },
+})
 
 -- Toggel neotree at startup
 vim.api.nvim_create_augroup("neotree", {})
