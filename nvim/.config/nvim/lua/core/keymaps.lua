@@ -9,5 +9,5 @@ vim.keymap.set('n', '<C-j>', "<C-w>j")
 vim.keymap.set('n', '<C-k>', "<C-w>k")
 
 -- Split widows
-vim.keymap.set('n', 'ss', ":split<CR><C-w>")
-vim.keymap.set('n', 'sv', ":vsplit<CR><C-w>")
+vim.keymap.set('n', '<C-s>h', ":split<CR><C-w>")
+vim.keymap.set('n', '<C-s>v', ":vsplit<CR><C-w>")
