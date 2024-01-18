@@ -46,4 +46,3 @@ opt.listchars = {
 	trail = "·",
     eol = "↵",
 }
-

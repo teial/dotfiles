@@ -25,15 +25,15 @@ return {
                     ["<space>"] = "open",
                 },
             },
-            event_handlers = { 
-                { 
-                    event = "neo_tree_window_after_open", 
-                    handler = function() 
-                        vim.cmd("setlocal nonumber norelativenumber") 
-                    end, 
+            event_handlers = {
+                {
+                    event = "neo_tree_window_after_open",
+                    handler = function()
+                        vim.cmd("setlocal nonumber norelativenumber")
+                    end,
                 },
             },
         })
-        vim.keymap.set('n', '<leader>nt', ':Neotree action=show source=filesystem position=left toggle<CR>')
+        vim.keymap.set('n', '<leader>tt', ':Neotree action=show source=filesystem position=left toggle<CR>')
     end
 }
