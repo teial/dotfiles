@@ -48,5 +48,4 @@ opt.listchars = {
 }
 
 -- Line width
-opt.colorcolumn = "100"
 opt.textwidth = 100
