@@ -18,15 +18,3 @@ require("lazy").setup("plugins", {
 	ui = { border = "single" },
 	change_detection = { notify = false },
 })
-
--- Toggel neotree at startup
-vim.api.nvim_create_augroup("neotree", {})
-vim.api.nvim_create_autocmd("UiEnter", {
-	desc = "Open Neotree automatically",
-	group = "neotree",
-	callback = function()
-		if vim.fn.argc() == 0 then
-			vim.cmd("Neotree action=focus source=filesystem position=left toggle")
-		end
-	end,
-})
