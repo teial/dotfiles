@@ -16,10 +16,12 @@ return {
                 "telekasten",
             },
             softener = {
-                telekasten = true,
+                telekasten = nil,
+                markdown = nil,
             },
         })
         vim.keymap.set("n", "j", "gj", {})
         vim.keymap.set("n", "k", "gk", {})
     end
 }
+
