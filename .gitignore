@@ -1,3 +1,7 @@
+# OS stuff
+.DS_Store
+
+# Temporary output and cache files
 tmux/.config/tmux/plugins
 lazy-lock.json
 .luarc.json
