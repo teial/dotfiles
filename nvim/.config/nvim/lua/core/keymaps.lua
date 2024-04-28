@@ -2,6 +2,9 @@
 vim.g.mapleader = ","
 vim.g.maplocalleader = ";"
 
+-- Fix localleader not appearing without using leader key first
+vim.keymap.set("n", "<localleader>", '<cmd>lua require("which-key").show("\\\\")<cr>')
+
 -- Move between windows
 vim.keymap.set("n", "<C-h>", "<C-w>h")
 vim.keymap.set("n", "<C-l>", "<C-w>l")
