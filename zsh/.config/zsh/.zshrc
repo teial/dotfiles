@@ -13,3 +13,6 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 # CLI tools
 eval "$(fzf --zsh)"
 source /Users/Teia/.config/broot/launcher/bash/br
+
+# Bat aliases
+alias fp='fzf --preview "bat --style numbers,changes --color=always {}" | head -500'
