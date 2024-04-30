@@ -1,6 +1,10 @@
 # OS stuff
 .DS_Store
 
+# Zsh stuff
+.zcompdump*
+.zsh_history
+
 # Temporary output and cache files
 tmux/.config/tmux/plugins
 lazy-lock.json
