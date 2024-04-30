@@ -1,3 +1,33 @@
 [user]
 	email = teia.leusten@proton.me
 	name = Teia Leusten
+
+[includeIf "gitdir:~/account/"]
+    path = ~/account/.gitconfig
+
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+
+[pull]
+	rebase = true
+
+[include]
+    path = ~/.config/delta/themes/catppuccin.gitconfig
+
+[core]
+    pager = delta
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true
+    side-by-side = true
+    line-numbers = true
+    features = catppuccin-macchiato
+
+[merge]
+    conflictstyle = diff3
+
+[diff]
+    colorMoved = default
