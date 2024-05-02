@@ -1,36 +1,36 @@
 return {
-    "epwalsh/obsidian.nvim",
-    version = "*",
-    lazy = true,
-    ft = "markdown",
-    dependencies = {
-        "nvim-lua/plenary.nvim",
-    },
-    config = function()
-        local obsidian = require("obsidian")
-        obsidian.setup({
-            workspaces = {
-                {
-                    name = "teial",
-                    path = "~/Drive/teial",
-                },
-            },
-            daily_notes = {
-                path = "~/Drive/teial/daily",
-            },
-        })
-        require("which-key").register({ ["<leader>o"] = { desc = "obsidian" } })
-        vim.keymap.set("n", "<leader>oc", obsidian.util.toggle_checkbox, { desc = "checkbox" })
-        vim.keymap.set("n", "<leader>od", obsidian.util.today, { desc = "today" })
-        vim.keymap.set("n", "<leader>oy", obsidian.util.yesterday, { desc = "yesterday" })
-        vim.keymap.set("n", "<leader>om", obsidian.util.tomorrow, { desc = "tomorrow" })
-        vim.keymap.set("n", "<leader>od", obsidian.util.dailies, { desc = "dailies" })
-        vim.keymap.set("n", "<leader>on", obsidian.util.new, { desc = "new note" })
-        vim.keymap.set("n", "<leader>ob", obsidian.util.backlinks, { desc = "backlinks" })
-        vim.keymap.set("n", "<leader>os", obsidian.util.search, { desc = "search" })
-        vim.keymap.set("n", "<leader>ot", obsidian.util.tags, { desc = "tags" })
-        vim.keymap.set("n", "<leader>oq", obsidian.util.quick_switch, { desc = "quick switch" })
-        vim.keymap.set("n", "<leader>of", obsidian.util.follow_link, { desc = "follow" })
-        vim.keymap.set("n", "<leader>ow", obsidian.util.workspace, { desc = "workspace" })
-    end,
+	"epwalsh/obsidian.nvim",
+	version = "*",
+	lazy = true,
+	ft = "markdown",
+	dependencies = {
+		"nvim-lua/plenary.nvim",
+	},
+	config = function()
+		local obsidian = require("obsidian")
+		obsidian.setup({
+			workspaces = {
+				{
+					name = "teial",
+					path = "~/Drive/teial",
+				},
+			},
+			daily_notes = {
+				path = "~/Drive/teial/daily",
+			},
+		})
+		require("which-key").register({ ["<leader>o"] = { desc = "obsidian" } })
+		vim.keymap.set("n", "<leader>oc", "<cmd>ObsidianToggleCheckbox<CR>", { desc = "checkbox" })
+		vim.keymap.set("n", "<leader>od", "<cmd>ObsidianToday<CR>", { desc = "today" })
+		vim.keymap.set("n", "<leader>oy", "<cmd>ObsidianToday -1<CR>", { desc = "yesterday" })
+		vim.keymap.set("n", "<leader>om", "<cmd>ObsidianToday 1<CR>", { desc = "tomorrow" })
+		vim.keymap.set("n", "<leader>od", "<cmd>ObsidianDailies<CR>", { desc = "dailies" })
+		vim.keymap.set("n", "<leader>on", "<cmd>ObsidianNew<CR>", { desc = "new note" })
+		vim.keymap.set("n", "<leader>ob", "<cmd>ObsidianBacklinks<CR>", { desc = "backlinks" })
+		vim.keymap.set("n", "<leader>os", "<cmd>ObsidianSearch<CR>", { desc = "search" })
+		vim.keymap.set("n", "<leader>ot", "<cmd>ObsidianTags<CR>", { desc = "tags" })
+		vim.keymap.set("n", "<leader>oq", "<cmd>ObsidianQuickSwitch<CR>", { desc = "quick switch" })
+		vim.keymap.set("n", "<leader>of", "<cmd>ObsidianFollowLink<CR>", { desc = "follow" })
+		vim.keymap.set("n", "<leader>ow", "<cmd>ObsidianWorkspace<CR>", { desc = "workspace" })
+	end,
 }
