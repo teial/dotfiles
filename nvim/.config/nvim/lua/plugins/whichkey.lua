@@ -10,7 +10,6 @@ return {
 				border = "single",
 			},
 		})
-		which.register({ ["<leader>n"] = { desc = "notes" } })
 		which.register({ ["<leader>t"] = { desc = "tree" } })
 		which.register({ ["<leader>f"] = { desc = "files" } })
 		which.register({ ["<leader>c"] = { desc = "code" } })
