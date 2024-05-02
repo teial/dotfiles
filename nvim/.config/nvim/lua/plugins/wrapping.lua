@@ -1,7 +1,8 @@
 return {
-    'andrewferrier/wrapping.nvim',
+    "andrewferrier/wrapping.nvim",
     config = function()
-        require('wrapping').setup({
+        local wrapping = require("wrapping")
+        wrapping.setup({
             create_commands = false,
             create_keymaps = false,
             auto_set_mode_filetype_allowlist = {
@@ -20,8 +21,6 @@ return {
                 markdown = nil,
             },
         })
-        vim.keymap.set("n", "j", "gj", {})
-        vim.keymap.set("n", "k", "gk", {})
-    end
+        vim.keymap.set("n", "<leader>tw", wrapping.toggle_wrap_mode, { desc = "wrap mode" })
+    end,
 }
-
