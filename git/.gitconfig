@@ -16,6 +16,7 @@
 
 [core]
     pager = delta
+	whitespace = -trailing-space,-indent-with-non-tab,-tab-in-indent
 
 [interactive]
     diffFilter = delta --color-only
