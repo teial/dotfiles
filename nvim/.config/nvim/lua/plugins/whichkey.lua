@@ -9,7 +9,7 @@ return {
             triggers_nowait = { "<leader>" },
         })
         which.register(
-            { t = "toggles", f = "files", c = "code", d = "debug", e = "errors", r = "repl" },
+            { t = "toggles", f = "files", c = "code", d = "debug", e = "errors", r = "repl", p = "pomodori" },
             { prefix = "<leader>", mode = "n", nowait = true }
         )
     end,
