@@ -20,7 +20,7 @@ return {
                                 maxLength = 15,
                             },
                             rustfmt = {
-                                extraArgs = { "--config", "max_width=100" },
+                                extraArgs = { "--config", "max_width=120" },
                             },
                         },
                     },

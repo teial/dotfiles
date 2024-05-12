@@ -7,7 +7,8 @@ return {
     config = function()
         require("pomo").setup({})
 
-        vim.keymap.set("n", "<leader>ps", "<cmd>TimerStart 25m<CR>", { desc = "start" })
+        vim.keymap.set("n", "<leader>ps", "<cmd>TimerStart 25m<CR>", { desc = "start 25" })
+        vim.keymap.set("n", "<leader>pb", "<cmd>TimerStart 5m<CR>", { desc = "start 5" })
         vim.keymap.set("n", "<leader>pt", "<cmd>TimerStop<CR>", { desc = "stop" })
         vim.keymap.set("n", "<leader>pp", "<cmd>TimerPause<CR>", { desc = "pause" })
         vim.keymap.set("n", "<leader>pr", "<cmd>TimerResume<CR>", { desc = "resume" })
