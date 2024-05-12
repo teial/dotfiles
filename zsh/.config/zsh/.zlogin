@@ -25,7 +25,7 @@ eval "$(pyenv init -)"
 export SDKMAN_DIR=$(brew --prefix sdkman-cli)/libexec
 [[ -s "${SDKMAN_DIR}/bin/sdkman-init.sh" ]] && source "${SDKMAN_DIR}/bin/sdkman-init.sh"
 
-# C++
+# C and C++
 CXXFLAGS="-std=c++20 -Wall -Wextra -Wpedantic -Werror -Weffc++"
 alias g++="g++-13 $CXXFLAGS"
-
+alias gcc="gcc-13"
