@@ -11,13 +11,13 @@
     homeDirectory = "/Users/Teia";
 
     # All my software
-    packages = [
+    packages = with pkgs; [
 
       # Git-related
-      pkgs.git
-      pkgs.delta
-      pkgs.git-lfs
-      pkgs.gh
+      git
+      delta
+      git-lfs
+      gh
 
       # Nightly overlays
       zig
