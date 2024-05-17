@@ -21,7 +21,8 @@ return {
 					"jdtls",
 					"gopls",
 					"julials",
-					"nil_ls",
+					"zls",
+					"nil_ls", -- for nix
 				},
 			})
 		end,
@@ -47,6 +48,18 @@ return {
 					"--clang-tidy",
 					"--header-insertion=iwyu",
 					"--completion-style=detailed",
+				},
+			})
+
+			lspconfig.zls.setup({
+				handlers = handlers,
+				capabilities = capabilities,
+				settings = {
+					zls = {
+						enable_inlay_hints = true,
+						inlay_hints_show_parameter_name = false,
+						warn_style = true,
+					},
 				},
 			})
 
