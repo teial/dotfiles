@@ -28,6 +28,10 @@ return {
 		config = function()
 			require("telescope").setup({
 				extensions = {
+					frecency = {
+						db_validate_threshold = 50,
+						ignore_patterns = { "*.git/*", "*/tmp/*" },
+					},
 					["ui-select"] = {
 						require("telescope.themes").get_dropdown({}),
 					},
