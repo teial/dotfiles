@@ -19,6 +19,10 @@
       git-lfs
       gh
 
+      # Programming languages
+      go
+      guile
+
       # Nightly overlays
       zig
     ];

@@ -14,7 +14,6 @@ brew "elixir"
 brew "fzf"
 brew "gh"
 brew "ghcup"
-brew "go"
 brew "libpq", link: true
 brew "md5sha1sum"
 brew "neovim", args: ["HEAD"]
