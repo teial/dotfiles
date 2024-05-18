@@ -21,7 +21,6 @@ return {
 					"jdtls",
 					"gopls",
 					"julials",
-					"zls",
 					"nil_ls", -- for nix
 				},
 			})
@@ -56,6 +55,7 @@ return {
 				capabilities = capabilities,
 				settings = {
 					zls = {
+						cmd = "/etc/profiles/per-user/teial/bin/zls",
 						enable_inlay_hints = true,
 						inlay_hints_show_parameter_name = false,
 						warn_style = true,

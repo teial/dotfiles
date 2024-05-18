@@ -1,4 +1,4 @@
-{ pkgs, zig, ... }:
+{ pkgs, zig, zls, ... }:
 {
   home = {
     # Channel version
@@ -25,6 +25,7 @@
 
       # Nightly overlays
       zig
+      zls
     ];
   };
 
