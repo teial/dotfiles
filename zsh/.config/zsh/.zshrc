@@ -13,6 +13,18 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 # CLI tools
 eval "$(fzf --zsh)"
 source /Users/Teia/.config/broot/launcher/bash/br
-
+#
 # Bat aliases
 alias fp='fzf --preview "bat --style numbers,changes --color=always {}" | head -500'
+
+# Because macOS keeps rewriting /etc/zshrc after every update, it keeps breaking nix
+# setup. We have to manually restore the confguration here.
+if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
+  NIXPATH=$(
+    env -i HOME="${HOME}" USER="$USER" sh -c '
+      source /etc/static/zshenv
+      echo "${PATH}"
+      '
+  )
+  PATH+=${NIXPATH}
+fi
