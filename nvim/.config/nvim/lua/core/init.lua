@@ -1,5 +1,5 @@
-require("core.options")
 require("core.keymaps")
+require("core.options")
 require("core.inlay")
 require("core.diagnostics")
 require("core.format")

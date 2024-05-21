@@ -1,16 +1,21 @@
+-- this is to fix bug: https://github.com/folke/which-key.nvim/issues/476
+vim.api.nvim_create_autocmd("FileType", {
+    desc = "Set up cpp Which-Key descriptions",
+    group = vim.api.nvim_create_augroup("cpp_mapping", { clear = true }),
+    pattern = "cpp",
+    callback = function()
+        vim.keymap.set("n", "<localleader>", function()
+            require("which-key").show(";")
+        end, { buffer = true })
+    end,
+})
+
 return {
-	"madskjeldgaard/cppman.nvim",
-	requires = {
-		{ "MunifTanjim/nui.nvim" },
-	},
-	config = function()
-		local cppman = require("cppman")
-		cppman.setup()
-		vim.keymap.set("n", "<leader>cm", function()
-			cppman.open_cppman_for(vim.fn.expand("<cword>"))
-		end, { desc = "cpp word search" })
-		vim.keymap.set("n", "<leader>cs", function()
-			cppman.input()
-		end, { desc = "cpp search" })
-	end,
+    "madskjeldgaard/cppman.nvim",
+    requires = {
+        { "MunifTanjim/nui.nvim" },
+    },
+    config = function()
+        require("cppman").setup()
+    end,
 }

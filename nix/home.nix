@@ -13,6 +13,9 @@
     # All my software
     packages = with pkgs; [
 
+      # Shell
+      starship
+
       # Git-related
       git
       delta
@@ -31,5 +34,13 @@
 
   # Enable home manager
   programs.home-manager.enable = true;
+
+  # Enable starship
+  programs.starship = {
+    enable = true;
+  };
+
+  # Enable programming languages
+  programs.go.enable = true;
 }
 
