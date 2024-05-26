@@ -16,6 +16,9 @@ export ERL_AFLAGS="-kernel shell_history enabled"
 # Haskell
 export PATH="$HOME/.cabal/bin:$HOME/.ghcup/bin:$PATH"
 
+# Go
+export PATH="$HOME/go/bin:$PATH"
+
 # Python
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
