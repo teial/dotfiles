@@ -1,12 +1,9 @@
-{ config, pkgs, ... }:
-{
-  imports = [ ./zsh ];    
+{ config, pkgs, ... }: {
+  imports = [ ./zsh ./tmux ];
 
-  home.packages = with pkgs; [
-    zoxide
-  ];
+  home.packages = with pkgs; [ zoxide fzf ];
 
-    # Set up environment variables.
+  # Set up environment variables.
   home.sessionVariables = {
     EDITOR = "nvim";
     BROWSER = "firefox";
@@ -21,4 +18,9 @@
   # Enable zoxide
   programs.zoxide.enable = true;
   programs.zoxide.enableZshIntegration = true;
+  programs.zoxide.options = [ "--cmd" "cd" ];
+
+  # Set up fzf.
+  programs.fzf.enable = true;
+  programs.fzf.tmux.enableShellIntegration = true;
 }

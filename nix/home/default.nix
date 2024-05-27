@@ -1,9 +1,10 @@
 { config, pkgs, zig, zls, ... }:
 {
   imports = [
-    ./dev
+    ./editor
+    ./languages
     ./shell
-    ./langs
+    ./tools
   ];
 
   home = {
