@@ -15,6 +15,9 @@ return {
 					path = "~/Drive/teial",
 					overrides = {
 						notes_subdir = "teial/5-garden",
+						daily_notes = {
+							folder = "teial/0-daily",
+						},
 					},
 				},
 				{
@@ -32,9 +35,16 @@ return {
 					},
 				},
 			},
-			daily_notes = {
-				folder = "teial/0-daily",
-			},
+			follow_url_func = function(url)
+				local path = url:match("^file://(.+)")
+				if path then
+					local parent = vim.fn.expand("%:p:h")
+					url = "file://localhost/" .. parent .. "/" .. path
+					print(url)
+				end
+				vim.fn.jobstart({ "open", url }) -- Mac OS
+				-- vim.fn.jobstart({"xdg-open", url})  -- linux
+			end,
 		})
 		require("which-key").register({ ["<leader>o"] = { desc = "obsidian" } })
 		vim.keymap.set("n", "<leader>oc", "<cmd>ObsidianToggleCheckbox<CR>", { desc = "checkbox" })

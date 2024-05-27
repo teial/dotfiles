@@ -81,7 +81,18 @@ return {
                 },
             })
 
-            lspconfig.lua_ls.setup(opts)
+            lspconfig.lua_ls.setup({
+                handlers = handlers,
+                capabilities = capabilities,
+                settings = {
+                    Lua = {
+                        diagnostics = {
+                            globals = { "vim" },
+                        },
+                    },
+                },
+            })
+
             lspconfig.marksman.setup(opts)
             lspconfig.taplo.setup(opts)
             lspconfig.jdtls.setup(opts)

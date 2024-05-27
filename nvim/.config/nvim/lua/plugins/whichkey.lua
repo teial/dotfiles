@@ -8,10 +8,15 @@ return {
 			window = { border = "single" },
 			triggers_nowait = { "<leader>", "<localleader>" },
 		})
-		which.register(
-			{ t = "toggles", f = "files", c = "code", d = "debug", e = "errors", r = "repl", p = "pomodori" },
-			{ prefix = "<leader>", mode = "n", nowait = true }
-		)
+		which.register({
+			t = "tree",
+			f = "files",
+			c = "code",
+			d = "debug",
+			e = "errors",
+			r = "repl",
+			p = "pomodoro",
+		}, { prefix = "<leader>", mode = "n", nowait = true })
 	end,
 	opts = {},
 }

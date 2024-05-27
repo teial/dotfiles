@@ -14,3 +14,7 @@ vim.keymap.set("n", "<C-k>", "<C-w>k")
 -- Split widows
 vim.keymap.set("n", "<C-s>h", ":split<CR><C-w>")
 vim.keymap.set("n", "<C-s>v", ":vsplit<CR><C-w>")
+--
+-- Move inside softly-wrapped block
+vim.keymap.set({ "n", "v" }, "j", "gj")
+vim.keymap.set({ "n", "v" }, "k", "gk")
