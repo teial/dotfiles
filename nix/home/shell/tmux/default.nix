@@ -45,14 +45,10 @@ in {
     shell = "${pkgs.zsh}/bin/zsh";
 
     # Terminal, becase tmux needs it.
-    terminal = "tmux-256color";
-
-    # Automatically spawn a session if trying to attach and none are running.
-    newSession = true;
+    terminal = "screen-256color";
 
     # All the plugins for tmux.
     plugins = with pkgs; [
-      tmuxPlugins.sensible
       tmuxPlugins.better-mouse-mode
       tmux-autoreload
       {
