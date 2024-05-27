@@ -40,9 +40,15 @@ in {
     enable = true;
 
     # Some plugins
-    plugins = [ "git" ];
+    plugins = [ "git" "tmux" ];
 
     # Pick a theme.
     theme = "robbyrussell";
+
+    # Extra config (to pass parameters to plugins)
+    extraConfig = ''
+      ZSH_TMUX_AUTOSTART=true
+      ZSH_TMUX_UNICODE=true
+    '';
   };
 }
