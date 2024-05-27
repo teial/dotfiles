@@ -37,7 +37,7 @@ y = 6
 decorations = "full"
 opacity = 0.9
 option_as_alt = "Both"
-dimensions = { lines = 48, columns = 190 }
+dimensions = { lines = 47, columns = 190 }
 
 [window.padding]
 x = 8
