@@ -43,7 +43,7 @@
           home-manager.extraSpecialArgs = { inherit zig zls; };
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
-          home-manager.users.teial.imports = [ ./home.nix ];
+          home-manager.users.teial = import ./home;
         }
       ];
     };
