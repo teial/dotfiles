@@ -6,8 +6,5 @@
       delta
       git-lfs
       gh
-
-      # Networking
-      wireguard-tools
     ];
 }
