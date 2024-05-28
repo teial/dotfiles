@@ -1,7 +1,30 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 {
-  # Extra tools (mostly for LSP).
-  home.packages = with pkgs; [
-    nixfmt-classic
-  ];
+  programs.neovim = {
+    # Enable neovim.
+    enable = true;
+    
+    # Install it here.
+    package = pkgs.neovim-unwrapped;
+
+    # Extra packages. This is where the real action happens.
+    extraPackages = with pkgs; [
+
+      # Golang
+      gofumpt
+      goimports-reviser
+      golines
+      gopls
+      delve
+
+      # Lua
+      selene
+      stylua
+      lua-language-server
+
+      # Nix
+      nil
+      nixfmt-classic
+    ];
+  };
 }

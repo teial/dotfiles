@@ -33,6 +33,8 @@
       "iina"
       "ivpn"
       "telegram"
+      "zoom"
+      "discord"
     ];
   };
 

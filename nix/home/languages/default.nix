@@ -1,7 +1,5 @@
-{ config, pkgs, zig, zls, configHome, ... }: let
-  configHome = builtins.baseNameOf config.xdg.configHome;
-in {
-  # TODO: Use https://github.com/nix-community/fenix to set up rust properly
+{ config, pkgs, ... }:
+{
   home.packages = with pkgs; [
     rustup 
     elixir
@@ -11,4 +9,6 @@ in {
     zig
     zls
   ];
+
+  programs.go.enable = true;
 }

@@ -1,4 +1,4 @@
-{ config, pkgs, zig, zls, ... }:
+{ config, pkgs, inputs, ... }:
 {
   imports = [
     ./editor

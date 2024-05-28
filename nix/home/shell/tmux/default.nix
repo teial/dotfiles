@@ -10,18 +10,6 @@
       sha256 = "sha256-tC9KIuEpMNbBbM6u3HZF0le73aybvA7agNBWYksKBDY=";
     };
   };
-
-  # Tmux autoreladed is another plugin that must be built by hand.
-  tmux-autoreload = pkgs.tmuxPlugins.mkTmuxPlugin {
-    pluginName = "autoreload";
-    version = "unstable-2024-05-27";
-    src = pkgs.fetchFromGitHub {
-      owner = "b0o";
-      repo = "tmux-autoreload";
-      rev = "e98aa3b74cfd5f2df2be2b5d4aa4ddcc843b2eba";
-      sha256 = "sha256-9Rk+VJuDqgsjc+gwlhvX6uxUqpxVD1XJdQcsc5s4pU4=";
-    };
-  };
 in {
   home.packages = with pkgs; [ tmux ];
 
@@ -47,14 +35,13 @@ in {
     # Terminal, becase tmux needs it.
     terminal = "screen-256color";
 
+    # The source of my woes vanquished.
+    escapeTime = 0;
+
     # All the plugins for tmux.
     plugins = with pkgs; [
       tmuxPlugins.better-mouse-mode
-      tmux-autoreload
-      {
-        plugin = tmux-minimal;
-        extraConfig = "bind-key b set-option status";
-      }
+      tmux-minimal
       {
         plugin = tmuxPlugins.resurrect;
         extraConfig = ''

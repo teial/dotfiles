@@ -21,16 +21,10 @@
     zls.url = "github:zigtools/zls";
     zls.inputs.nixpkgs.follows = "nixpkgs";
     zls.inputs.zig-overlay.follows = "zig";
-
-    # Neovim nightly
-    neovim.url = "github:nix-community/neovim-nightly-overlay";
-    neovim.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs @ { nixpkgs, home-manager, darwin, ... }: let
     system = "aarch64-darwin";
-    zig = inputs.zig.packages.${system}.master;
-    zls = inputs.zls.packages.${system}.zls;
   in 
   {
     # System configuration for Calypso
@@ -40,7 +34,7 @@
         ./hosts/calypso/default.nix
         home-manager.darwinModules.home-manager
         {
-          home-manager.extraSpecialArgs = { inherit zig zls; };
+          home-manager.extraSpecialArgs = { inherit inputs; };
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.users.teial = import ./home;
