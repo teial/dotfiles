@@ -1,6 +1,8 @@
 { config, pkgs, ... }:
 {
   home.packages = with pkgs; [
+    julia-bin
+    jdk
     rustup 
     elixir
     erlang
@@ -9,6 +11,4 @@
     zig
     zls
   ];
-
-  programs.go.enable = true;
 }

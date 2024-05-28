@@ -1,6 +1,3 @@
-# Homebrew setup
-eval "$(/opt/homebrew/bin/brew shellenv)"
-
 # CLI tools
 eval "$(fzf --zsh)"
 source /Users/Teia/.config/broot/launcher/bash/br

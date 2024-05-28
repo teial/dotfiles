@@ -18,7 +18,6 @@ return {
                     "marksman",
                     "taplo",
                     "jdtls",
-                    "julials",
                 },
             })
         end,
@@ -105,10 +104,12 @@ return {
                 },
             })
 
+            lspconfig.julials.setup(opts)
+
+            -- Remove or refactor these to work with nix binaries.
             lspconfig.marksman.setup(opts)
             lspconfig.taplo.setup(opts)
             lspconfig.jdtls.setup(opts)
-            lspconfig.julials.setup(opts)
 
             vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "hover" })
             vim.keymap.set("n", "<leader>cD", vim.lsp.buf.declaration, { desc = "declaration" })

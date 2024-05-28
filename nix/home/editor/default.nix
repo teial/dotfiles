@@ -22,6 +22,9 @@
       stylua
       lua-language-server
 
+      # Elixir
+      elixir-ls
+
       # Nix
       nil
       nixfmt-classic
