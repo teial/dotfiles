@@ -1,7 +1,13 @@
 { config, pkgs, ... }: {
   imports = [ ./zsh ./tmux ];
 
-  home.packages = with pkgs; [ zoxide fzf ];
+  home.packages = with pkgs; [
+    zoxide
+    fzf
+    bat
+    ripgrep
+    htop
+  ];
 
   # Set up environment variables.
   home.sessionVariables = {
@@ -13,6 +19,8 @@
   # Some useful aliases
   home.shellAliases = {
     update = "nix run nix-darwin -- switch --flake .";
+    gcc = "zig cc";
+    "g++" = "zig ++";
   };
 
   # Enable zoxide

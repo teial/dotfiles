@@ -3,6 +3,7 @@
   home.packages = with pkgs; [
     julia-bin
     jdk
+    clang-tools
     rustup 
     elixir
     erlang

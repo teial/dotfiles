@@ -35,7 +35,9 @@
       "telegram"
       "zoom"
       "discord"
+      "firefox"
       "google-chrome"
+      "alacritty"
     ];
   };
 

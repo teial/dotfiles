@@ -6,5 +6,14 @@
       delta
       git-lfs
       gh
+
+      # Networking
+      curl
+      wget
+      tcpflow
+
+      # Other
+      stow
+      aria2
     ];
 }
