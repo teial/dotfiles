@@ -2,8 +2,8 @@
 	email = teia.leusten@proton.me
 	name = Teia Leusten
 
-[includeIf "gitdir:~/account/"]
-    path = ~/account/.gitconfig
+[includeIf "gitdir:~/Work/"]
+    path = ~/Work/.gitconfig
 
 [url "git@github.com:"]
 	insteadOf = https://github.com/
@@ -32,3 +32,6 @@
 
 [diff]
     colorMoved = default
+
+[init]
+	defaultBranch = main
