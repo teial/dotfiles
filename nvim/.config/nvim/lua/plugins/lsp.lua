@@ -15,13 +15,10 @@ return {
             require("mason-lspconfig").setup({
                 ensure_installed = {
                     "clangd",
-                    "lua_ls",
                     "marksman",
                     "taplo",
                     "jdtls",
-                    "gopls",
                     "julials",
-                    "nil_ls", -- for nix
                 },
             })
         end,
@@ -68,6 +65,7 @@ return {
                 capabilities = capabilities,
                 settings = {
                     gopls = {
+                        cmd = "/etc/profiles/per-user/teial/bin/go",
                         hints = {
                             assignVariableTypes = true,
                             compositeLiteralFields = true,
@@ -86,8 +84,22 @@ return {
                 capabilities = capabilities,
                 settings = {
                     Lua = {
+                        cmd = "lua-language-server",
                         diagnostics = {
                             globals = { "vim" },
+                        },
+                    },
+                },
+            })
+
+            lspconfig.nil_ls.setup({
+                handlers = handlers,
+                capabilities = capabilities,
+                settings = {
+                    Nix = {
+                        cmd = "nil",
+                        formatting = {
+                            command = { "nixfmt" },
                         },
                     },
                 },
@@ -97,7 +109,6 @@ return {
             lspconfig.taplo.setup(opts)
             lspconfig.jdtls.setup(opts)
             lspconfig.julials.setup(opts)
-            lspconfig.nil_ls.setup(opts)
 
             vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "hover" })
             vim.keymap.set("n", "<leader>cD", vim.lsp.buf.declaration, { desc = "declaration" })
