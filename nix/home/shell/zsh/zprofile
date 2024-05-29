@@ -8,6 +8,5 @@ alias g++="g++-13 $CXXFLAGS"
 alias gcc="gcc-13"
 
 # Homebrew (for now)
-(echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> /Users/Teia/.config/zsh/.zprofile
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
