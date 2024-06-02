@@ -1,6 +1,7 @@
 [user]
 	email = teia.leusten@proton.me
 	name = Teia Leusten
+	signingkey = 39AE94EEDBF345EF
 
 [includeIf "gitdir:~/Work/"]
     path = ~/Work/.gitconfig
@@ -35,3 +36,9 @@
 
 [init]
 	defaultBranch = main
+
+[gpg]
+	program = /etc/profiles/per-user/teial/bin/gpg
+
+[commit]
+	gpgsign = true
