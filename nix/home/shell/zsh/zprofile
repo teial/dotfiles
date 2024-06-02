@@ -8,5 +8,13 @@ alias gcc="gcc-13"
 
 # Homebrew
 if [[ $(uname -m) == 'arm64' ]]; then
-     eval "$(/opt/homebrew/bin/brew shellenv)"
- fi
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+# GPG
+$ if [ -r ~/.zshrc ]; then
+    echo -e '\nexport GPG_TTY=$(tty)' >> ~/.zshrc;
+else
+    echo -e '\nexport GPG_TTY=$(tty)' >> ~/.zprofile;
+fi
+

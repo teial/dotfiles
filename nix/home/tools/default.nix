@@ -15,5 +15,6 @@
       # Other
       stow
       aria2
+      gnupg
     ];
 }
