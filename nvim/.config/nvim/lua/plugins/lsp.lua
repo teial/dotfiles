@@ -46,12 +46,24 @@ return {
                 },
             })
 
+            lspconfig.elixirls.setup({
+                handlers = handlers,
+                capabilities = capabilities,
+                cmd = { "elixir-ls" },
+                settings = {
+                    elixirLS = {
+                        dialyzerEnabled = true,
+                        incrementalDialyzer = true,
+                    },
+                },
+            })
+
             lspconfig.zls.setup({
                 handlers = handlers,
                 capabilities = capabilities,
                 settings = {
                     zls = {
-                        cmd = "/etc/profiles/per-user/teial/bin/zls",
+                        cmd = "zls",
                         enable_inlay_hints = true,
                         inlay_hints_show_parameter_name = false,
                         warn_style = true,
@@ -64,7 +76,7 @@ return {
                 capabilities = capabilities,
                 settings = {
                     gopls = {
-                        cmd = "/etc/profiles/per-user/teial/bin/go",
+                        cmd = "gopls",
                         hints = {
                             assignVariableTypes = true,
                             compositeLiteralFields = true,
