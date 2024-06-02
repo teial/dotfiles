@@ -14,6 +14,8 @@
     EDITOR = "nvim";
     BROWSER = "firefox";
     TERMINAL = "alacritty";
+    SSH_KEY_PATH = "~/.ssh/id_ed25519";
+    SSH_PUB_KEY_PATH = "~/.ssh/id_ed25519.pub";
   };
 
   # Some useful aliases

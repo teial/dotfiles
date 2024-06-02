@@ -1,12 +1,12 @@
 # Elixir
 export ERL_AFLAGS="-kernel shell_history enabled"
 
-# SDKMan
 # C and C++
 CXXFLAGS="-std=c++20 -Wall -Wextra -Wpedantic -Werror -Weffc++"
 alias g++="g++-13 $CXXFLAGS"
 alias gcc="gcc-13"
 
-# Homebrew (for now)
-eval "$(/opt/homebrew/bin/brew shellenv)"
-
+# Homebrew
+if [[ $(uname -m) == 'arm64' ]]; then
+     eval "$(/opt/homebrew/bin/brew shellenv)"
+ fi

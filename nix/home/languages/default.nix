@@ -11,5 +11,7 @@
     guile
     zig
     zls
+    ghc
+    stack
   ];
 }

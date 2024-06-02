@@ -28,6 +28,9 @@
       # Nix
       nil
       nixfmt-classic
+
+      # Haskell
+      haskell-language-server
     ];
   };
 }
