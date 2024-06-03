@@ -1,37 +1,42 @@
 { config, pkgs, ... }: {
-  imports = [ ./zsh ./tmux ];
+    imports = [ ./zsh ./tmux ];
 
-  home.packages = with pkgs; [
-    zoxide
-    fzf
-    bat
-    ripgrep
-    htop
-    tree
-  ];
+    home.packages = with pkgs; [
+        zoxide
+        fzf
+        bat
+        ripgrep
+        htop
+        tree
+        eza
+    ];
 
-  # Set up environment variables.
-  home.sessionVariables = {
-    EDITOR = "nvim";
-    BROWSER = "firefox";
-    TERMINAL = "alacritty";
-    SSH_KEY_PATH = "~/.ssh/id_ed25519";
-    SSH_PUB_KEY_PATH = "~/.ssh/id_ed25519.pub";
-  };
+    # Set up environment variables.
+    home.sessionVariables = {
+        EDITOR = "nvim";
+        BROWSER = "firefox";
+        TERMINAL = "alacritty";
+        SSH_KEY_PATH = "~/.ssh/id_ed25519";
+        SSH_PUB_KEY_PATH = "~/.ssh/id_ed25519.pub";
+    };
 
-  # Some useful aliases
-  home.shellAliases = {
-    update = "nix run nix-darwin -- switch --flake .";
-    gcc = "zig cc";
-    "g++" = "zig ++";
-  };
+    # Some useful aliases
+    home.shellAliases = {
+        update = "nix run nix-darwin -- switch --flake .";
+        gcc = "zig cc";
+        "g++" = "zig ++";
+        ls = "eza";
+    };
 
-  # Enable zoxide
-  programs.zoxide.enable = true;
-  programs.zoxide.enableZshIntegration = true;
-  programs.zoxide.options = [ "--cmd" "cd" ];
+    # Enable eza.
+    programs.eza.enable = true;
 
-  # Set up fzf.
-  programs.fzf.enable = true;
-  programs.fzf.tmux.enableShellIntegration = true;
+    # Enable zoxide.
+    programs.zoxide.enable = true;
+    programs.zoxide.enableZshIntegration = true;
+    programs.zoxide.options = [ "--cmd" "cd" ];
+
+    # Set up fzf.
+    programs.fzf.enable = true;
+    programs.fzf.tmux.enableShellIntegration = true;
 }
