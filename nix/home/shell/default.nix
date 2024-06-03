@@ -7,6 +7,7 @@
     bat
     ripgrep
     htop
+    tree
   ];
 
   # Set up environment variables.
