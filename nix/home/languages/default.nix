@@ -13,5 +13,6 @@
     zls
     ghc
     stack
+    nodejs
   ];
 }

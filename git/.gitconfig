@@ -1,19 +1,16 @@
 [user]
-	email = teia.leusten@proton.me
-	name = Teia Leusten
-	signingkey = 39AE94EEDBF345EF
+    name = Teia Leusten
+    email = teia.leusten@proton.me
 
-[includeIf "gitdir:~/Work/"]
-    path = ~/Work/.gitconfig
+[include]
+    path = ~/Drive/.gitconfig
+    path = ~/.config/delta/themes/catppuccin.gitconfig
 
 [url "git@github.com:"]
 	insteadOf = https://github.com/
 
 [pull]
 	rebase = true
-
-[include]
-    path = ~/.config/delta/themes/catppuccin.gitconfig
 
 [core]
     pager = delta
@@ -36,9 +33,3 @@
 
 [init]
 	defaultBranch = main
-
-[gpg]
-	program = /etc/profiles/per-user/teial/bin/gpg
-
-[commit]
-	gpgsign = true

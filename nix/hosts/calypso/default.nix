@@ -45,6 +45,7 @@
             "firefox"
             "google-chrome"
             "alacritty"
+            "zed"
         ];
 
         # Appstore stuff.

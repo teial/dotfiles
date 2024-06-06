@@ -1,36 +1,39 @@
 { config, pkgs, ... }:
 {
-  programs.neovim = {
-    # Enable neovim.
-    enable = true;
-    
-    # Install it here.
-    package = pkgs.neovim-unwrapped;
+    programs.neovim = {
+        # Enable neovim.
+        enable = true;
+        
+        # Install it here.
+        package = pkgs.neovim-unwrapped;
 
-    # Extra packages. This is where the real action happens.
-    extraPackages = with pkgs; [
+        # Associate neovim with vim command.
+        vimAlias = true;
 
-      # Golang
-      gofumpt
-      goimports-reviser
-      golines
-      gopls
-      delve
+        # Extra packages. This is where the real action happens.
+        extraPackages = with pkgs; [
 
-      # Lua
-      selene
-      stylua
-      lua-language-server
+            # Golang
+            gofumpt
+            goimports-reviser
+            golines
+            gopls
+            delve
 
-      # Elixir
-      elixir-ls
+            # Lua
+            selene
+            stylua
+            lua-language-server
 
-      # Nix
-      nil
-      nixfmt-classic
+            # Elixir
+            elixir-ls
 
-      # Haskell
-      haskell-language-server
-    ];
-  };
+            # Nix
+            nil
+            nixfmt-classic
+
+            # Haskell
+            haskell-language-server
+        ];
+    };
 }
