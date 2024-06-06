@@ -1,6 +1,7 @@
 [user]
     name = Teia Leusten
     email = teia.leusten@proton.me
+    signingkey = 39AE94EEDBF345EF
 
 [include]
     path = ~/Drive/.gitconfig
