@@ -18,3 +18,5 @@ vim.keymap.set("n", "<C-s>v", ":vsplit<CR><C-w>")
 -- Move inside softly-wrapped block
 vim.keymap.set({ "n", "v" }, "j", "gj")
 vim.keymap.set({ "n", "v" }, "k", "gk")
+
+-- Forbid switching langauges in normal mode

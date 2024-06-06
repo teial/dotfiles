@@ -116,7 +116,7 @@ return {
                 },
             })
 
-            lspconfig.julials.setup(opts)
+            -- lspconfig.julials.setup(opts)
 
             -- Remove or refactor these to work with nix binaries.
             lspconfig.marksman.setup(opts)

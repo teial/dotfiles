@@ -1,8 +1,12 @@
 return {
     {
         "hrsh7th/nvim-cmp",
+        dependencies = {
+            "onsails/lspkind.nvim"
+        },
         config = function()
             local cmp = require("cmp")
+            local lspkind = require('lspkind')
             require("luasnip.loaders.from_vscode").lazy_load()
 
             cmp.setup({
@@ -23,11 +27,21 @@ return {
                     ["<CR>"] = cmp.mapping.confirm({ select = true }),
                 }),
                 sources = cmp.config.sources({
-                    { name = "nvim_lsp" },
-                    { name = "luasnip" },
+                    { name = 'async-path' },
+                    { name = "copilot",   keyword_length = 3 },
+                    { name = 'nvim_lsp',  keyword_length = 1 },
+                    { name = 'buffer',    keyword_length = 3 },
+                    { name = 'luasnip',   keyword_length = 2 },
                 }, {
                     { name = "buffer" },
                 }),
+                formatting = {
+                    format = lspkind.cmp_format({
+                        mode = "symbol",
+                        max_width = 50,
+                        symbol_map = { Copilot = "" }
+                    })
+                }
             })
         end,
     },
@@ -40,5 +54,26 @@ return {
     },
     {
         "hrsh7th/cmp-nvim-lsp",
+    },
+    {
+        "zbirenbaum/copilot.lua",
+        cmd = "Copilot",
+        event = "InsertEnter",
+        config = function()
+            require("copilot").setup({
+                panel = { enabled = false },
+                suggestion = {
+                    auto_trigger = false,
+                    keymap = {
+                        accept = "<C-d>",
+                        next = "<C-n>",
+                        prev = "<C-p>",
+                        accept_word = "<M-w>",
+                        accept_line = "<M-l>",
+                        dismiss = "<C-e>",
+                    },
+                },
+            })
+        end,
     },
 }
