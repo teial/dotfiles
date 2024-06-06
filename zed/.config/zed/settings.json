@@ -25,7 +25,7 @@
     "tab_bar.background": "#18192650",
     "toolbar.background": "#24273a50",
     "status_bar.background": "#18192650",
-    "title_bar.background": "#18192650",
+    "title_bar.background": "#d1dae4ff",
     "editor.gutter.background": "#24273a50",
     "tab.active_background": "#24273af0",
     "tab.inactive_background": "#1e203015"
