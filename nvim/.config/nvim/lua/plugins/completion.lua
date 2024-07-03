@@ -2,7 +2,8 @@ return {
     {
         "hrsh7th/nvim-cmp",
         dependencies = {
-            "onsails/lspkind.nvim"
+            "onsails/lspkind.nvim",
+            'Arkissa/cmp-agda-symbols'
         },
         config = function()
             local cmp = require("cmp")
@@ -28,10 +29,11 @@ return {
                 }),
                 sources = cmp.config.sources({
                     { name = 'async-path' },
-                    { name = "copilot",   keyword_length = 3 },
-                    { name = 'nvim_lsp',  keyword_length = 1 },
-                    { name = 'buffer',    keyword_length = 3 },
-                    { name = 'luasnip',   keyword_length = 2 },
+                    { name = "copilot",      keyword_length = 3 },
+                    { name = 'nvim_lsp',     keyword_length = 1 },
+                    { name = 'buffer',       keyword_length = 3 },
+                    { name = 'luasnip',      keyword_length = 2 },
+                    { name = 'agda-symbols', keyword_length = 1 },
                 }, {
                     { name = "buffer" },
                 }),
@@ -61,6 +63,13 @@ return {
         event = "InsertEnter",
         config = function()
             require("copilot").setup({
+                server_opts_overrides = {
+                    settings = {
+                        advanced = {
+                            length = 500,
+                        },
+                    },
+                },
                 panel = { enabled = false },
                 suggestion = {
                     auto_trigger = false,

@@ -1,33 +1,34 @@
+local augroup = vim.api.nvim_create_augroup
+local autocmd = vim.api.nvim_create_autocmd
+augroup("__formatter__", { clear = true })
+autocmd("BufWritePost", {
+    group = "__formatter__",
+    command = ":FormatWrite",
+})
+
 return {
-    "elentok/format-on-save.nvim",
+    "mhartington/formatter.nvim",
     config = function()
-        local formatters = require("format-on-save.formatters")
-        require("format-on-save").setup({
-            experiments = {
-                partial_update = "diff",
-            },
-            formatter_by_ft = {
-                css = formatters.lsp,
-                html = formatters.lsp,
-                java = formatters.lsp,
-                json = formatters.lsp,
-                lua = formatters.lsp,
-                python = formatters.black,
-                rust = formatters.lsp,
-                haskell = formatters.lsp,
-                sh = formatters.shfmt,
-                yaml = formatters.lsp,
-                nix = formatters.lsp,
+        local util = require("formatter.util")
+        require("formatter").setup({
+            filetype = {
                 go = {
-                    formatters.shell({
-                        cmd = { "goimports-reviser", "-rm-unused", "-set-alias", "-format", "%" },
-                        tempfile = function()
-                            return vim.fn.expand("%") .. ".formatter-temp"
-                        end,
-                    }),
-                    formatters.shell({ cmd = { "gofmt" } }),
+                    function()
+                        return {
+                            exe = "goimports-reviser",
+                            args = {
+                                "-output",
+                                "stdout",
+                                "-rm-unused",
+                                util.escape_path(util.get_current_buffer_file_path()),
+                            },
+                            stdin = true,
+                        }
+                    end,
+                    require("formatter.filetypes.go").gofumpt,
+                    require("formatter.filetypes.go").golines,
                 },
-            },
+            }
         })
-    end,
+    end
 }

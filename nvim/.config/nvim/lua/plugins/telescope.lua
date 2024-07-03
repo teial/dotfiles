@@ -49,4 +49,11 @@ return {
             vim.keymap.set("n", "<leader>fr", "<Cmd>Telescope frecency<CR>", { desc = "recent" })
         end,
     },
+    {
+        'ghassan0/telescope-glyph.nvim',
+        config = function()
+            require('telescope').load_extension('glyph')
+            vim.keymap.set("n", "<leader>fl", "<cmd>Telescope glyph<CR>", { desc = "glyphs" })
+        end
+    },
 }

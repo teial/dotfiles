@@ -76,13 +76,12 @@ return {
                 capabilities = capabilities,
                 settings = {
                     gopls = {
-                        cmd = "gopls",
                         hints = {
                             assignVariableTypes = true,
-                            compositeLiteralFields = true,
-                            compositeLiteralTypes = true,
+                            compositeLiteralFields = false,
+                            compositeLiteralTypes = false,
                             constantValues = true,
-                            functionTypeParameters = true,
+                            functionTypeParameters = false,
                             parameterNames = false,
                             rangeVariableTypes = true,
                         },
