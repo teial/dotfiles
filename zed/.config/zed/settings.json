@@ -10,7 +10,7 @@
   "ui_font_size": 16,
   "blinking": "terminal_controlled",
   "format_on_save": "on",
-  "preferred_line_length": 100,
+  "preferred_line_length": 120,
   "remove_trailing_whitespace_on_save": true,
   "ensure_final_newline_on_save": true,
   "vim_mode": true,
@@ -36,9 +36,10 @@
   "buffer_font_features": {
     "liga": false
   },
-  "show_whitespaces": "selection",
+  "show_whitespaces": "boundary",
   "inlay_hints": {
     "enabled": true,
+    "max_length": 15,
     "show_type_hints": true,
     "show_parameter_hints": false,
     "show_other_hints": true,
@@ -46,6 +47,19 @@
     "scroll_debounce_ms": 50
   },
   "lsp": {
+    "gopls": {
+      "initialization_options": {
+        "hints": {
+          "assignVariableTypes": true,
+          "compositeLiteralFields": true,
+          "compositeLiteralTypes": true,
+          "constantValues": true,
+          "functionTypeParameters": true,
+          "parameterNames": true,
+          "rangeVariableTypes": true
+        }
+      }
+    },
     "elixir-ls": {
       "settings": {
         "dialyzerEnabled": true,
@@ -59,7 +73,7 @@
     "quick_actions": false
   },
   "scrollbar": {
-    "show": "never"
+    "show": "always"
   },
   "terminal": {
     "copy_on_select": true,

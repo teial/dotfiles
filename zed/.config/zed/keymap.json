@@ -1,9 +1,9 @@
 [
   {
-    "context": "Editor || Dock",
+    "context": "Editor || ProjectPanel",
     "bindings": {
       "ctrl-h": ["workspace::ActivatePaneInDirection", "Left"],
-      "ctrl-l": ["workspace::ActivatePaneInDirection", "Right"],
+      // "ctrl-l": ["workspace::ActivatePaneInDirection", "Right"],
       "ctrl-k": ["workspace::ActivatePaneInDirection", "Up"],
       "ctrl-j": ["workspace::ActivatePaneInDirection", "Down"]
     }
@@ -13,6 +13,23 @@
     "bindings": {
       "ctrl-[": "pane::ActivatePrevItem",
       "ctrl-]": "pane::ActivateNextItem"
+    }
+  },
+  {
+    "context": "ProjectPanel && not_editing",
+    "bindings": {
+      "a": "project_panel::NewFile",
+      "A": "project_panel::NewDirectory",
+      "r": "project_panel::Rename",
+      "d": "project_panel::Delete",
+      "y": "project_panel::Copy",
+      "p": "project_panel::Paste",
+      "c": "project_panel::Duplicate",
+      "/": "project_panel::NewSearchInDirectory",
+      "q p": "project_panel::CopyPath",
+      "q r": "project_panel::CopyRelativePath",
+      "o": "project_panel::RevealInFinder",
+      "ctrl-l": "project_panel::ToggleFocus"
     }
   }
 ]
