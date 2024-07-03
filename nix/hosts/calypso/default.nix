@@ -6,6 +6,9 @@
     # Necessary for using flakes on this system.
     nix.settings.experimental-features = "nix-command flakes";
 
+    # Trusted users. Because devenv keeps asking for it.
+    nix.settings.trusted-users = [ "root" "teial" ];
+
     # Set up my shells.
     programs.zsh.enable = true;
     environment.shells = with pkgs; [ bash zsh ];

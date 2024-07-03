@@ -1,20 +1,24 @@
 { pkgs, ... }:
 {
     home.packages = with pkgs; [
-      # Version control
-      git
-      delta
-      git-lfs
-      gh
+        # Version control
+        git
+        delta
+        git-lfs
+        gh
 
-      # Networking
-      curl
-      wget
-      tcpflow
+        # Networking
+        curl
+        wget
+        tcpflow
 
-      # Other
-      stow
-      aria2
-      gnupg
+        # Development
+        exercism 
+        devenv
+
+        # Other
+        stow
+        aria2
+        gnupg
     ];
 }

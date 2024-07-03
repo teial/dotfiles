@@ -9,6 +9,7 @@
         htop
         tree
         eza
+        direnv
     ];
 
     # Set up environment variables.
@@ -39,4 +40,8 @@
     # Set up fzf.
     programs.fzf.enable = true;
     programs.fzf.tmux.enableShellIntegration = true;
+
+    # Set up direnv.
+    programs.direnv.enable = true;
+    programs.direnv.enableZshIntegration = true;
 }

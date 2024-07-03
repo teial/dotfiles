@@ -12,15 +12,6 @@
         # Home manager
         home-manager.url = "github:nix-community/home-manager";
         home-manager.inputs.nixpkgs.follows = "nixpkgs";
-
-        # Zig nightly
-        zig.url = "github:mitchellh/zig-overlay";
-        zig.inputs.nixpkgs.follows = "nixpkgs";
-
-        # Zls nightly
-        zls.url = "github:zigtools/zls";
-        zls.inputs.nixpkgs.follows = "nixpkgs";
-        zls.inputs.zig-overlay.follows = "zig";
     };
 
     outputs = inputs @ { nixpkgs, home-manager, darwin, ... }: let
