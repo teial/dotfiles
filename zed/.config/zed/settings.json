@@ -36,6 +36,12 @@
   "buffer_font_features": {
     "liga": false
   },
+  "git": {
+    "git_gutter": "tracked_files",
+    "inline_blame": {
+      "enabled": true
+    }
+  },
   "show_whitespaces": "boundary",
   "inlay_hints": {
     "enabled": true,
@@ -66,6 +72,30 @@
         "incrementalDialyzer": true,
         "autoBuild": true
       }
+    },
+    "jdtls": {
+      "initialization_options": {
+        "java": {
+          "settings": {
+            "import": {
+              "gradle": {
+                "enabled": true
+              }
+              "maven": {
+                "enabled": true
+              }
+            }
+            "inlayhints": {
+              "parameterNames": {
+                "enabled": false
+              }
+            },
+            "saveActions": {
+              "organizeImports": true
+            }
+          }
+        }
+      }
     }
   },
   "toolbar": {
@@ -81,4 +111,11 @@
       "title": false
     }
   }
+"assistant": {
+    "version": "1",
+    "provider": {
+      "default_model": "claude-3-5-sonnet",
+      "name": "anthropic"
+    }
+  },
 }
