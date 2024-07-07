@@ -1,13 +1,11 @@
 return {
     {
         "williamboman/mason.nvim",
-        config = function()
-            require("mason").setup({
-                ui = {
-                    border = "single",
-                },
-            })
-        end,
+        opts = {
+            ui = {
+                border = "single",
+            },
+        },
     },
     {
         "williamboman/mason-lspconfig.nvim",
@@ -120,7 +118,6 @@ return {
             -- Remove or refactor these to work with nix binaries.
             lspconfig.marksman.setup(opts)
             lspconfig.taplo.setup(opts)
-            lspconfig.jdtls.setup(opts)
 
             vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "hover" })
             vim.keymap.set("n", "<leader>cD", vim.lsp.buf.declaration, { desc = "declaration" })
