@@ -10,3 +10,7 @@
 tmux/.config/tmux/plugins
 lazy-lock.json
 .luarc.json
+
+# Gradle config
+gradle/.config/gradle/*
+!gradle/.config/gradle/gradle.properties
