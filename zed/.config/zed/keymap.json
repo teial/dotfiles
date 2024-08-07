@@ -12,7 +12,8 @@
     "context": "Editor",
     "bindings": {
       "ctrl-[": "pane::ActivatePrevItem",
-      "ctrl-]": "pane::ActivateNextItem"
+      "ctrl-]": "pane::ActivateNextItem",
+      "ctrl-r": "editor::Rename"
     }
   },
   {

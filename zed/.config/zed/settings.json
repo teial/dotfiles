@@ -53,6 +53,20 @@
     "scroll_debounce_ms": 50
   },
   "lsp": {
+    "rust-analyzer": {
+      "initialization_options": {
+        "inlayHints": {
+          "maxLength": 15,
+          "lifetimeElisionHints": {
+            "useParameterNames": true,
+            "enable": "skip_trivial"
+          },
+          "closureReturnTypeHints": {
+            "enable": "always"
+          }
+        }
+      }
+    },
     "gopls": {
       "initialization_options": {
         "hints": {
@@ -72,30 +86,6 @@
         "incrementalDialyzer": true,
         "autoBuild": true
       }
-    },
-    "jdtls": {
-      "initialization_options": {
-        "java": {
-          "settings": {
-            "import": {
-              "gradle": {
-                "enabled": true
-              }
-              "maven": {
-                "enabled": true
-              }
-            }
-            "inlayhints": {
-              "parameterNames": {
-                "enabled": false
-              }
-            },
-            "saveActions": {
-              "organizeImports": true
-            }
-          }
-        }
-      }
     }
   },
   "toolbar": {
@@ -110,12 +100,12 @@
     "toolbar": {
       "title": false
     }
-  }
-"assistant": {
+  },
+  "assistant": {
     "version": "1",
     "provider": {
-      "default_model": "claude-3-5-sonnet",
+      "default_model": "claude-3-5-sonnet-20240620",
       "name": "anthropic"
     }
-  },
+  }
 }
