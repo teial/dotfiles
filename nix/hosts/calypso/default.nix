@@ -40,6 +40,7 @@
 
         # Some good casks that I use (I try to keep this to minimum since I live in the terminal anyway)
         casks = [
+            "kawa"
             "iina"
             "ivpn"
             "telegram"
@@ -94,7 +95,14 @@
             persistent-apps = [
                 "/Applications/Alacritty.app"
                 "/Applications/Firefox.app"
+                "/Applications/Todoist.app"
+                "/Applications/Telegram.app"
             ];
+
+            # Corner actions.
+            wvous-tl-corner = 2; # mission control
+            wvous-bl-corner = 13; # lock screen
+            wvous-tr-corner = 11; # launchpad
         };
     };
 }
