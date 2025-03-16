@@ -1,0 +1,37 @@
+[user]
+    name = Teia Leusten
+	email = teia.leusten@proton.me
+    signingkey = 39AE94EEDBF345EF
+
+[include]
+    path = ~/Forge/.gitconfig
+    path = ~/.config/delta/themes/catppuccin.gitconfig
+
+[pull]
+	rebase = true
+
+[core]
+    pager = delta
+	whitespace = -trailing-space,-indent-with-non-tab,-tab-in-indent
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true
+    side-by-side = true
+    line-numbers = true
+    features = catppuccin-macchiato
+
+[merge]
+    conflictstyle = diff3
+
+[diff]
+    colorMoved = default
+
+[init]
+	defaultBranch = main
+
+[credential]
+	helper = osxkeychain
+
