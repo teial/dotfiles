@@ -1,0 +1,5 @@
+# Turn on system GHC
+system-ghc: true
+
+# Disable stack not connected to nix message
+notify-if-nix-on-path: false
