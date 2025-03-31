@@ -11,7 +11,12 @@ return {
     {
         "snacks.nvim",
         opts = {
-            scroll = { enabled = false },
+            scroll = {
+                animate = {
+                    duration = 5,
+                    easing = "inOutQuad",
+                },
+            },
         },
     },
 }
