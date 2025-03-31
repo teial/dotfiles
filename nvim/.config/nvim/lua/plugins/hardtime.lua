@@ -12,5 +12,7 @@ return {
         { "k", 'v:count == 0 ? "gk" : "k"', mode = { "n", "x" }, desc = "Up", expr = true, silent = true },
         { "<Up>", 'v:count == 0 ? "gk" : "k"', mode = { "n", "x" }, desc = "Up", expr = true, silent = true },
     },
-    opts = {},
+    opts = {
+        max_count = 5,
+    },
 }
