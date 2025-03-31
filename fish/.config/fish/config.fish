@@ -27,6 +27,9 @@ if status is-interactive
     # Fix GPG mess with terminal.
     export GPG_TTY=$(tty)
 
+    # Rust setup.
+    fish_add_path -gP "$HOME/.cargo/bin"
+
     # Set up CLI tools.
     fzf --fish | source
     zoxide init --cmd cd fish | source
@@ -34,9 +37,6 @@ if status is-interactive
     # Set XDG paths.
     set -gx XDG_CONFIG_HOME "$HOME/.config"
     set -gx XDG_CACHE_HOME "$HOME/.cache"
-
-    # Rust setup.
-    fish_add_path -gP "$HOME/.cargo/bin"
 
     # Java setup
     fish_add_path /opt/homebrew/opt/openjdk/bin
