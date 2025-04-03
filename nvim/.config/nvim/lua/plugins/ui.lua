@@ -13,7 +13,7 @@ return {
         opts = {
             scroll = {
                 animate = {
-                    duration = 5,
+                    duration = { step = 5, total = 100 },
                     easing = "inOutQuad",
                 },
             },
