@@ -3,6 +3,9 @@
 	email = teia.leusten@proton.me
     signingkey = 39AE94EEDBF345EF
 
+[commit]
+	gpgsign = true
+
 [include]
     path = ~/Forge/.gitconfig
     path = ~/.config/delta/themes/catppuccin.gitconfig
@@ -35,3 +38,5 @@
 [credential]
 	helper = osxkeychain
 
+[safe]
+	directory = ~/.local/share/nvim/*
