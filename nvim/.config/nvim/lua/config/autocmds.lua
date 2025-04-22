@@ -1,13 +1,3 @@
--- Open explorer automatically when opening neomvim.
-vim.api.nvim_create_autocmd("VimEnter", {
-    pattern = "*",
-    callback = function()
-        Snacks.explorer()
-    end,
-    group = vim.api.nvim_create_augroup("auto_open_neotree", { clear = true }),
-    desc = "Auto open Neo-tree when entering buffer",
-})
-
 -- Remember folds.
 local persistent_folds = vim.api.nvim_create_augroup("Persistent folds", { clear = true })
 vim.api.nvim_create_autocmd({ "BufWinLeave", "BufWritePost", "WinLeave" }, {
