@@ -21,3 +21,7 @@ end, { desc = "Projects" })
 vim.keymap.set("n", "<leader>ta", function()
     vim.cmd("edit ~/Forge/teial/7-archive/index.md")
 end, { desc = "Archive" })
+
+vim.keymap.set("n", "<leader>te", function()
+    vim.cmd("edit ~/Forge/teial/0-system/exploration.md")
+end, { desc = "Exploration" })

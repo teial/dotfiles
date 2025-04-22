@@ -10,6 +10,7 @@ return {
             heading = {
                 backgrounds = {},
             },
+            latex = { enable = false },
         },
     },
 }
