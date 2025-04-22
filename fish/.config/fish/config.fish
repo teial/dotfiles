@@ -30,6 +30,16 @@ if status is-interactive
     # Rust setup.
     fish_add_path -gP "$HOME/.cargo/bin"
 
+    # Haskell setup.
+    fish_add_path -gP "$HOME/.ghcup/bin"
+
+    # Node and yarn paths.
+    nvm use latest
+    fish_add_path -gP "$HOME/.yarn/bin"
+
+    # Java setup
+    fish_add_path -gP /opt/homebrew/opt/openjdk/bin
+
     # Set up CLI tools.
     fzf --fish | source
     zoxide init --cmd cd fish | source
@@ -37,9 +47,6 @@ if status is-interactive
     # Set XDG paths.
     set -gx XDG_CONFIG_HOME "$HOME/.config"
     set -gx XDG_CACHE_HOME "$HOME/.cache"
-
-    # Java setup
-    fish_add_path /opt/homebrew/opt/openjdk/bin
 
     # Additional libraries for compliation.
     set -gx LDFLAGS "-L/opt/homebrew/opt/zlib/lib -L/opt/homebrew/opt/libiconv/lib"
