@@ -1,3 +1,18 @@
+-- Open explorer on loading Neovim with folder arg or no args.
+vim.api.nvim_create_autocmd("VimEnter", {
+    callback = function()
+        local argv = vim.fn.argv()
+        if #argv == 0 then
+            Snacks.explorer.open()
+        elseif #argv == 1 then
+            local arg = argv[1]
+            if vim.fn.isdirectory(arg) == 1 then
+                Snacks.explorer.open()
+            end
+        end
+    end,
+})
+
 -- Remember folds.
 local persistent_folds = vim.api.nvim_create_augroup("Persistent folds", { clear = true })
 vim.api.nvim_create_autocmd({ "BufWinLeave", "BufWritePost", "WinLeave" }, {
