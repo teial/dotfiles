@@ -1,3 +1,10 @@
 *.*~
-elpaca/
+config.el
+auto-save-list/
+backups/
 eln-cache/
+elpa/
+elpaca/
+history
+recentf
+tramp
