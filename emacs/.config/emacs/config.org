@@ -2,68 +2,15 @@
 #+author: Teia Leusten
 #+description: Teia Leusten's personal Emacs config.
 #+startup: overview
-#+options: toc:2
-
-* TABLE OF CONTENTS :toc:
-:PROPERTIES:
-:auto-expand: body
-:END:
-- [[#package-manager][PACKAGE MANAGER]]
-  - [[#install-elpaca][Install elpaca]]
-  - [[#enable-use-package-support][Enable use-package support]]
-  - [[#use--hook-suffix][Use ~-hook~ suffix]]
-- [[#general][GENERAL]]
-- [[#basics][BASICS]]
-  - [[#identity][Identity]]
-  - [[#directories][Directories]]
-- [[#code][CODE]]
-  - [[#rainbow-delimiters][Rainbow delimiters]]
-- [[#dashboard][DASHBOARD]]
-- [[#denote][DENOTE]]
-  - [[#install-denote][Install denote]]
-  - [[#add-denote-exploration-menu][Add denote exploration menu]]
-  - [[#define-front-matter][Define front matter]]
-  - [[#define-templates][Define templates]]
-  - [[#set-up-org-capture-templates][Set up org capture templates]]
-- [[#emacs][EMACS]]
-  - [[#backups][Backups]]
-  - [[#customize][Customize]]
-  - [[#encoding][Encoding]]
-  - [[#exit-emacs-without-confirmations][Exit Emacs without confirmations]]
-- [[#evil][EVIL]]
-- [[#completions][COMPLETIONS]]
-  - [[#vertico][Vertico]]
-- [[#fonts][FONTS]]
-  - [[#defining-font-faces][Defining font faces]]
-  - [[#zooming-inout][Zooming in/out]]
-- [[#icons][ICONS]]
-- [[#modeline][MODELINE]]
-- [[#org-mode][ORG MODE]]
-  - [[#enable-indent-mode][Enable indent mode]]
-  - [[#enable-table-of-contents][Enable table of contents]]
-  - [[#states][states]]
-  - [[#qol-improvements][QoL improvements]]
-- [[#shell][SHELL]]
-- [[#sudo][SUDO]]
-- [[#theming][THEMING]]
-- [[#user-interface][USER INTERFACE]]
-  - [[#disable-menubar-toolbars-and-scrollbars][Disable menubar, toolbars, and scrollbars]]
-  - [[#disable-sound][Disable sound]]
-  - [[#display-line-numbers-and-truncated-lines][Display line numbers and truncated lines]]
-  - [[#specify-emacs-frame-size-and-position][Specify Emacs frame size and position]]
-  - [[#remove-title-bar][Remove title bar]]
-  - [[#enable-transparency][Enable transparency]]
-  - [[#add-small-margins-around-the-frame][Add small margins around the frame]]
-  - [[#enable-hl-line-mode][Enable hl-line-mode]]
-- [[#which-key][WHICH-KEY]]
 
 * PACKAGE MANAGER
 We are going to use Elpaca instead of straight for one simple reason - speed.
 
 ** Install elpaca
-First, let's install Elpaca. This following snippet is taken directly from the Elpaca [[https://github.com/progfolio/elpaca][github]].
+First, let's install Elpaca itself. This following snippet is taken directly from the Elpaca [[https://github.com/progfolio/elpaca][github]].
 
 #+begin_src emacs-lisp
+
   (defvar elpaca-installer-version 0.11)
   (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
   (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
@@ -102,67 +49,62 @@ First, let's install Elpaca. This following snippet is taken directly from the E
       (let ((load-source-file-function nil)) (load "./elpaca-autoloads"))))
   (add-hook 'after-init-hook #'elpaca-process-queues)
   (elpaca `(,@elpaca-order))
+
 #+end_src
 
 ** Enable use-package support
 It is just more convenient to use ~use-package~ declarations, since allmost all package recipes provide them.
 
 #+begin_src emacs-lisp
+
   (elpaca elpaca-use-package
     (elpaca-use-package-mode))
+
+#+end_src
+
+** Auto-update packages
+Run auto-update periodically.
+
+#+begin_src emacs-lisp
+
+  (use-package auto-package-update
+    :ensure t
+    :custom
+    (auto-package-update-interval 7)
+    (auto-package-update-delete-old-versions t)
+    (auto-package-update-hide-results t)
+    (auto-package-update-prompt-before-update t)
+    :config
+    (auto-package-update-maybe))
+
 #+end_src
 
 ** Use ~-hook~ suffix
 One unfortunate thing about ~use-package~ is that it hides the ~-hook~ suffix in ~:hook~ sections. It can become very confusing figuring out what is going one. Clear is better than clever.
 
 #+begin_src emacs-lisp
-(setopt use-package-hook-name-suffix nil)
+
+  (setopt use-package-hook-name-suffix nil)
+
 #+end_src
 
 * GENERAL
-General and its keybindings. The keybindings here are of the leader-type. Everything else related to particular packages is defined in the respecitive ~use-package~ block and usually uses Emacs-style prefixes.
+General and its keybindings. The keybindings here all begin with a leader key. Everything else related to particular packages is defined in the respecitive ~use-package~ block and uses Emacs-style prefixes.
 
 #+begin_src emacs-lisp
+
+  (unbind-key "C-z")
+
   (use-package general
     :ensure t
     :demand t
     :config
-    (general-evil-setup t)
-
     ;; Set up ',' as the global leader key
     (general-create-definer tl/leader
       :states '(normal insert visual emacs)
       :keymaps 'override
       :prefix ","
       :global-prefix "M-,")
-
-    ;; Apropos
-    (tl/leader
-     "a" '(:ignore t :wk "apropos")
-     "a a" '(apropos :wk "apropos all")
-     "a c" '(apropos-command :wk "apropos command")
-     "a d" '(apropos-documentation :wk "apropos docstring")
-     "a l" '(apropos-library :wk "apropos in library")
-     "a v" '(apropos-value :wk "apropos by value"))
-
-    ;; Buffers
-    (tl/leader
-     "b" '(:ignore t :wk "buffer")
-     "b b" '(switch-to-buffer :wk "switch to buffer")
-     "b i" '(ibuffer :wk "ibuffer")
-     "b k" '(kill-current-buffer :wk "kill buffer")
-     "b n" '(next-buffer :wk "next buffer")
-     "b p" '(previous-buffer :wk "previous buffer")
-     "b r" '(revert-buffer :wk "revert buffer"))
-
-    ;; Evaluation
-    (tl/leader
-     "e" '(:ignore t :wk "evaluate")
-     "e b" '(eval-buffer :wk "eval buffer")
-     "e d" '(eval-defun :wk "eval defun")
-     "e e" '(eval-expression :wk "eval expession")
-     "e l" '(eval-last-sexp :wk "eval expression before point")
-     "e r" '(eval-region :wk "eval region"))
 
     ;; Files
     (tl/leader
@@ -177,41 +119,13 @@ General and its keybindings. The keybindings here are of the leader-type. Everyt
   	       (load-file "~/.config/emacs/init.el"))
   	     :wk "reload config"))
 
-    ;; Help
-    (tl/leader
-     "h" '(:ignore t :wk "help")
-     "h f" '(describe-function :wk "describe function")
-     "h v" '(describe-variable :wk "describe variable")
-     "h m" '(describe-mode :wk "describe mode")
-     "h c" '(describe-command :wk "describe command")
-     "h k" '(describe-key :wk "describe key"))
-
-    ;; Shells
-    (tl/leader
-     "s" '(:ignore t :wk "shell")
-     "s s" '(eshell :wk "eshell"))
-
     ;; Toggles
     (tl/leader
      "t" '(:ignore t :wk "toggle")
      "t l" '(display-line-numbers-mode :wk "line numbers")
      "t r" '(visual-line-mode :wk "truncated lines")
-     "t t" '(org-tidy-toggle :wk "org property drawers"))
+     "t t" '(org-tidy-toggle :wk "org property drawers")))
 
-    ;; Windows
-    (tl/leader
-     "w" '(:ignore t :wk "windows")
-     ;; Window splits
-     "w c" '(evil-window-delete :wk "close window")
-     "w n" '(evil-window-new :wk "new window")
-     "w s" '(evil-window-split :wk "horizontal split")
-     "w v" '(evil-window-vsplit :wk "vertical split")
-     ;; Window motions
-     "w h" '(evil-window-left :wk "window left")
-     "w j" '(evil-window-down :wk "window down")
-     "w k" '(evil-window-up :wk "window up")
-     "w l" '(evil-window-right :wk "window right")
-     "w w" '(evil-window-next :wk "goto next window")))
 #+end_src
 
 * BASICS
@@ -221,14 +135,17 @@ Basic configuration, used by other packages. This includes personal information,
 Identity information used by some programs like GPG and mail clients.
 
 #+begin_src emacs-lisp
-(setq user-full-name "Teia Lesuten")
-(setq user-mail-address "teia.leusten@proton.me")
+
+  (setq user-full-name "Teia Lesuten")
+  (setq user-mail-address "teia.leusten@proton.me")
+
 #+end_src
 
 ** Directories
 Various directories used by the system.
 
 #+begin_src emacs-lisp
+
   (defvar tl/org-path "~/Forge/teial/"
     "Directory for org notes.")
 
@@ -252,25 +169,28 @@ Various directories used by the system.
 
   (defvar tl/org-resources-path (file-name-concat tl/org-path "resources/")
     "Subdirectory for resouces.")
+
 #+end_src
 
-* CODE
+* CODING
 ** Rainbow delimiters
 Visually matched delimiters.
 
 #+begin_src emacs-lisp
+
   (use-package rainbow-delimiters
     :ensure t
-    :defer t
     :hook
-    (prog-mode . rainbow-delimiters-mode)
-    (org-mode . rainbow-delimiters-mode))
+    (prog-mode-hook . rainbow-delimiters-mode)
+    (org-mode-hook . rainbow-delimiters-mode))
+
 #+end_src
 
 * DASHBOARD
 Add some usefullness on startup.
 
 #+begin_src emacs-lisp
+
   (use-package dashboard
     :ensure t
     :after nerd-icons
@@ -289,15 +209,17 @@ Add some usefullness on startup.
     (add-hook 'elpaca-after-init-hook #'dashboard-insert-startupify-lists)
     (add-hook 'elpaca-after-init-hook #'dashboard-initialize)
     (dashboard-setup-startup-hook))
+
 #+end_src
 
 * DENOTE
-This is your digital garden.
+Settings for my digital garden and productivity system.
 
 ** Install denote
 Install Denote package.
 
 #+begin_src emacs-lisp
+
   (use-package denote
     :ensure t
     :hook (dired-mode . denote-dired-mode)
@@ -338,27 +260,29 @@ Install Denote package.
     (setq denote-excluded-directories-regexp nil)
     (setq denote-excluded-keywords-regexp nil)
     (setq denote-rename-confirmations '(rewrite-front-matter modify-file-name))
-    ;; Pick dates, where relevant, with Org's advanced interface:
     (setq denote-date-prompt-use-org-read-date t)
-    ;; Automatically rename Denote buffers using the `denote-rename-buffer-format'.
     (denote-rename-buffer-mode 1))
+
 #+end_src
 
 ** Add denote exploration menu
 List all denotes in the denote-directory in a convenient UI.
 
 #+begin_src emacs-lisp
+
   (use-package denote-menu
     :ensure t
-    :bind 
+    :bind
     (:map global-map
       ("C-c n a" . list-denotes)))
+
 #+end_src
 
 ** Define front matter
 We need custom front matter for specific note types.
 
 #+begin_src emacs-lisp
+
   (defvar tl/front-matter-header
     (concat "#+title:      %s\n"
             "#+date:       %s\n"
@@ -389,12 +313,14 @@ We need custom front matter for specific note types.
 
   (defvar tl/area-front-matter
     (tl/assemble-front-matter))
+
 #+end_src
 
 ** Define templates
 We define template strings that are later use both in denote commands and in org capture.
 
 #+begin_src emacs-lisp
+
   (defvar tl/book-template
     (concat "* TABLE OF CONTENTS :toc:\n"
             "  :PROPERTIES:\n"
@@ -416,14 +342,16 @@ We define template strings that are later use both in denote commands and in org
             "  :PROPERTIES:\n"
             "  :auto-expand: body\n"
             "  :END:\n\n"
-            "* GOALS\n"
+            "* goals\n"
             "%?\n\n"))
+
 #+end_src
 
 ** Set up org capture templates
 This is a very important parts of the denote (and org) system. It helps put notes into their shelves and add metadata that depends on the note category.
 
 #+begin_src emacs-lisp
+
   (with-eval-after-load 'org-capture
     ;; Book template
     (add-to-list
@@ -480,52 +408,56 @@ This is a very important parts of the denote (and org) system. It helps put note
     (general-define-key
      :states 'normal
      "C-c c" 'org-capture))
+
 #+end_src
 
 * EMACS
 Tweaks to Emacs configuration not relared to UI.
 
 #+begin_src emacs-lisp
-  ;; Show trailing whitespace.
-  (setq show-trailing-whitespace t)
-  ;; Use trash-cli rather than rm when deleting files.
-  (setq delete-by-moving-to-trash t)
-  ;; Don't use double space to demarkate sentences.
-  (setq sentence-end-double-space nil)
+
+  (setq show-trailing-whitespace t)    ;; Show trailing whitespace.
+  (setq delete-by-moving-to-trash t)   ;; Use trash-cli rather than rm when deleting files.
+  (setq sentence-end-double-space nil) ;; Don't use double space to demarkate sentences.
+
 #+end_src
 
 ** Backups
 Control how mackups are made.
 
 #+begin_src emacs-lisp
+
   ;; keep backup and save files in a dedicated directory
   (setq backup-directory-alist
         `((".*" . ,(file-name-concat user-emacs-directory "backups")))
         auto-save-file-name-transforms
         `((".*" ,(file-name-concat user-emacs-directory "backups") t)))
+
   ;; Backup by copying file. The safest and also the slowest aproach.
   (setq backup-by-copying t)
+
   ;; Do more backups.
   (setq delete-old-versions t
         kept-new-versions 6
         kept-old-versions 2
         version-control t)
+
 #+end_src
 
 ** Customize
 Don't persist customizations.
 
 #+begin_src emacs-lisp
-  ;; Use a temp file as a placeholder
-    (setq custom-file (make-temp-file ""))
-  ;; Mark all themes as safe, since we can't persist now
-  (setq custom-safe-themes t)
+  (setq custom-file (make-temp-file "")) ;; Use a temp file as a placeholder.
+  (setq custom-safe-themes t)            ;; Mark all themes as safe, since we can't persist now.
+
 #+end_src
 
 ** Encoding
 UTF-8 everywhere.
 
 #+begin_src emacs-lisp
+
   (set-charset-priority 'unicode)
   (setq locale-coding-system 'utf-8
         coding-system-for-read 'utf-8
@@ -535,37 +467,54 @@ UTF-8 everywhere.
   (set-selection-coding-system 'utf-8)
   (prefer-coding-system 'utf-8)
   (setq default-process-coding-system '(utf-8-unix . utf-8-unix))
+
 #+end_src
 
 ** Exit Emacs without confirmations
 #+begin_src emacs-lisp
+
   (setq confirm-kill-emacs nil
         confirm-kill-processes nil)
+
 #+end_src
 
 * EVIL
+I tried to get rid of evil but it is impossible. I will stick to Evil basics though, I don't want it to be too intrusive.
+
 #+begin_src emacs-lisp
+
   (use-package evil
     :ensure t
-    :init ;; tweak evil's configuration before loading it
-    (setq evil-want-integration t)
-    (setq evil-want-keybinding nil)
-    (setq evil-vsplit-window-right t)
-    (setq evil-split-window-below t)
+
+    :init
     (setq evil-respect-visual-line-mode t)
-    (setq evil-want-C-u-scroll nil)
-    (setq evil-want-C-d-scroll nil)
-    (setq evil-want-C-i-jump nil)
+    (setq evil-undo-system 'undo-redo)
+    (setq evil-want-C-i-jump nil)                        ;; Retain Emacs C-u.
+    (setq evil-toggle-key "C-`")                         ;; Because the deault C-z is to useful to use for evil toggle.
+
     :config
-    (evil-mode 1))
-  (use-package evil-collection
-    :after evil
-    :ensure t
-    :config
-    (setq evil-collection-mode-list '(dashboard dired ibuffer))
-    (evil-collection-init))
-  (use-package evil-tutor
-    :ensure t)
+    (evil-mode)
+
+    ;; Evil-states per major mode
+    (setq evil-default-state 'emacs)
+    (setq evil-normal-state-modes '(fundamental-mode
+                                    ssh-config-mode
+                                    conf-mode
+                                    prog-mode
+                                    text-mode
+                                    repos-mode
+                                    dired-mode))
+
+    ;; Minor mode evil states
+    (add-hook 'with-editor-mode-hook 'evil-insert-state)
+    (add-hook 'git-commit-setup-hook 'evil-insert-state) ;; Start editing Magit in insert state.
+    (evil-set-initial-state 'eat-mode 'emacs)           ;; Same for Eat.
+
+    ;; Return C-r to its proper state.
+    (define-key evil-insert-state-map (kbd "C-r") 'isearch-backward)
+    (define-key evil-normal-state-map (kbd "C-r") 'isearch-backward)
+    (define-key evil-visual-state-map (kbd "C-r") 'isearch-backward))
+
 #+end_src
 
 * COMPLETIONS
@@ -575,11 +524,12 @@ Packages that provide completion features.
 Vertico provides only completion UI based solely on built-in Emacs facilities.
 
 #+begin_src emacs-lisp :tangle no
+
   (use-package vertico
     :ensure t
     :custom
     (vertico-resize t) ;; Grow and shrink the Vertico minibuffer
-    (vertico-cycle t) ;; Enable cycling for `vertico-next/previous'
+    (vertico-cycle t)  ;; Enable cycling for `vertico-next/previous'
     :init
     (vertico-mode))
 
@@ -606,6 +556,7 @@ Vertico provides only completion UI based solely on built-in Emacs facilities.
     (completion-styles '(orderless basic))
     (completion-category-defaults nil)
     (completion-category-overrides '((file (styles partial-completion)))))
+
 #+end_src
 
 * FONTS
@@ -614,6 +565,7 @@ Vertico provides only completion UI based solely on built-in Emacs facilities.
 Defining the various fonts that Emacs will use.
 
 #+begin_src emacs-lisp
+
   (set-face-attribute 'default nil
     :font "Sarasa Term SC Nerd"
     :height 160
@@ -626,56 +578,68 @@ Defining the various fonts that Emacs will use.
     :font "Sarasa Term SC Nerd"
     :height 160
     :weight 'medium)
+
   ;; Makes commented text italics.
   (set-face-attribute 'font-lock-comment-face nil
     :slant 'italic)
+
   ;; Adjust line spacing.
   (setq-default line-spacing 0.15)
   (setq-default line-height 1.15)
+
 #+end_src
 
 ** Zooming in/out
 You can use the bindings CTRL plus =/- for zooming in/out. You can also use CTRL plus the mouse wheel for zooming in/out.
 
 #+begin_src emacs-lisp
-  (global-set-key (kbd "C-=") 'text-scale-increase)
-  (global-set-key (kbd "C--") 'text-scale-decrease)
+
+  (global-set-key (kbd "C-M-=") 'text-scale-increase)
+  (global-set-key (kbd "C-M--") 'text-scale-decrease)
   (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
   (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
+
 #+end_src
 
 * ICONS
 Adding icons to Emacs.
 
 #+begin_src emacs-lisp
+
   (use-package nerd-icons
     :ensure t)
+
   ;; ibuffer
   (use-package nerd-icons-ibuffer
     :ensure t
     :after nerd-icons
     :config
     (add-hook 'ibuffer-mode-hook #'nerd-icons-ibuffer-mode))
+
   ;; dired
   (use-package nerd-icons-dired
     :ensure t
     :after nerd-icons
     :config
     (add-hook 'dired-mode-hook #'nerd-icons-dired-mode))
-  ;; completions
+
+  ;; Completions
   (use-package nerd-icons-completion
     :ensure t
     :config
     (nerd-icons-completion-mode))
+
 #+end_src
 
 * MODELINE
 A minimalistic modeline. The Doom one is nicer, but I prefer to minimize stuff.
 
 #+begin_src emacs-lisp
+
   (use-package mood-line
     :ensure t
     :config (mood-line-mode))
+
 #+end_src
 
 * ORG MODE
@@ -683,28 +647,48 @@ Org mode is so central to Emacs that some people use Emacs exclusively for org m
 
 ** Enable indent mode
 #+begin_src emacs-lisp
-  (add-hook 'org-mode-hook 'org-indent-mode)
+
+  (with-eval-after-load 'org
+    (add-hook 'org-mode-hook 'org-indent-mode))
+
 #+end_src
 
 ** Enable table of contents
 #+begin_src emacs-lisp
+
   (use-package toc-org
     :ensure t
     :init (add-hook 'org-mode-hook 'toc-org-mode))
+
 #+end_src
 
-** Todo states
+** Define todo states
 Managing todo states.
 
 #+begin_src emacs-lisp
+
   ;; Disable greying out DONE headlines.
   (setq org-fontify-done-headline nil)
+
   ;; Automatically set parent item to DONE when children are all DONE.
   (defun org-summary-todo (n-done n-not-done)
     "Switch entry to DONE when all subentries are done, to TODO otherwise."
     (let (org-log-done org-todo-log-states)   ; turn off logging
       (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
   (add-hook 'org-after-todo-statistics-hook #'org-summary-todo)
+
+  ;; Define default TODO states. Per-buffer settings will be set in the file header when required.
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "STARTED(s!)" "WAIT(w/!)" "|" "DONE(d!)")))
+
+  (setq org-log-into-drawer t) ;; Put state changes with timestamps into the drawer.
+  (setq org-log-done nil)      ;; The output doesn't go into drawer so I just disable it.
+
+  ;; Set faces for some TODO states.
+  (setq org-todo-keyword-faces
+        '(("STARTED" . "#EBCB8B")
+          ("WAIT" . "#D08770")))
+
 #+end_src
 
 ** QoL improvements
@@ -714,27 +698,33 @@ Little improvements to org-mode provided by other packages.
 This is a QoL feature that makes it almost unnecessary to realod Emacs during configuration process. Now all you need to do is just reload config, becase tangled file will already be there.
 
 #+begin_src emacs-lisp
+
   (use-package org-auto-tangle
     :ensure t
     :hook (org-mode-hook . org-auto-tangle-mode))
+
 #+end_src
 
 *** ~org-bullets~: Enable org bullets
 Org-bullets gives us attractive bullets rather than asterisks.
 
 #+begin_src emacs-lisp
+
   (use-package org-bullets
     :ensure t
     :hook (org-mode-hook . (lambda () (org-bullets-mode 1))))
+
 #+end_src
 
 *** ~org-autolist~: Automatic lists
 Enable autoamtic list item or checkbox creation when pressing RET.
 
 #+begin_src emacs-lisp
+
   (use-package org-autolist
     :ensure t
     :hook (org-mode-hook . org-autolist-mode))
+
 #+end_src
 
 *** ~org-tempo~: Block tag expansion
@@ -756,34 +746,54 @@ Org-tempo is not a separate package but a module within org that can be enabled.
 | <el                    | '#+BEGIN_SRC emacs-lisp … '#+END_SRC    |
 
 #+begin_src emacs-lisp
+
   (with-eval-after-load 'org
     (require 'org-tempo)
     (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp")))
+
 #+end_src
 
 *** ~org-tidy~: Hide property drawers
 Hide property drawers on items.
 
 #+begin_src emacs-lisp
+
   (use-package org-tidy
     :ensure t
     :hook (org-mode-hook . org-tidy-mode))
+
 #+end_src
 
 *** ~org-auto-expand~: Auto expand headings
 Automatically expand specified headings.
 
 #+begin_src emacs-lisp
+
   (use-package org-auto-expand
     :ensure t
     :config
     (org-auto-expand-mode))
+
+#+end_src
+
+* PDF
+Display pdf in Emacs.
+
+#+begin_src emacs-lisp
+
+  (use-package doc-view
+    :custom
+    (doc-view-resolution 300)
+    (doc-view-mupdf-use-svg t)
+    (large-file-warning-threshold (* 150 (expt 2 20))))
+
 #+end_src
 
 * SHELL
 For the sake of purity, we will be using only Eshell. For serious shell work I have ghostty installed separately.
 
 #+begin_src emacs-lisp
+
   (use-package eshell-syntax-highlighting
     :ensure t
     :after esh-mode
@@ -797,12 +807,14 @@ For the sake of purity, we will be using only Eshell. For serious shell work I h
   	eshell-hist-ignoredups t
   	eshell-scroll-to-bottom-on-input t
           eshell-destroy-buffer-when-process-dies t))
+
 #+end_src
 
 * SUDO
 sudo-edit gives us the ability to open files with sudo privileges or switch over to editing with sudo privileges if we initially opened the file without such privileges.
 
 #+begin_src emacs-lisp
+
   (use-package sudo-edit
     :ensure t
     :after general
@@ -810,26 +822,32 @@ sudo-edit gives us the ability to open files with sudo privileges or switch over
     (tl/leader
      "fu" '(sudo-edit-find-file :wk "find file as root")
      "fU" '(sudo-edit :wk "edit file as root")))
+
 #+end_src
 
 * THEMING
 Making Emacs less bland.
 
 #+begin_src emacs-lisp
+
   (use-package doom-themes
     :ensure t
     :config
-    ;; Global settings (defaults)
+
+    ;; No bold, but italic is ok.
     (setq doom-themes-enable-bold nil
           doom-themes-enable-italic t)
+
     ;; Corrects (and improves) org-mode's native fontification.
     (doom-themes-org-config)
     (load-theme 'doom-nord-aurora :noconfirm)
+
     ;; Disable bold globally.
     (mapc
      (lambda (face)
        (set-face-attribute face nil :weight 'normal :bold nil))
      (face-list)))
+
 #+end_src
 
 * USER INTERFACE
@@ -839,71 +857,98 @@ Let's make Emacs look a little bit better.
 Disable the ugly UI.
 
 #+begin_src emacs-lisp
+
   (menu-bar-mode -1)
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
+
 #+end_src
 
 ** Disable sound
 Removing distractions.
 
 #+begin_src emacs-lisp
+
   (setq ring-bell-function 'ignore)
+
 #+end_src
 
 ** Display line numbers and truncated lines
 Can't really work without line numbers.
 
 #+begin_src emacs-lisp
+
   (setq display-line-numbers-type 'relative)
   (global-display-line-numbers-mode 1)
   (global-visual-line-mode 1)
+
 #+end_src
 
 ** Specify Emacs frame size and position
 This part of configuration is specific to my home notebook, Calypso.
 
 #+begin_src emacs-lisp
+
   (setq default-frame-alist
     '((top . 50)
       (left . 230)
       (width . 150)
       (height . 51)))
+
 #+end_src
 
 ** Remove title bar
 Reomove the title bar, it looks rather ugly to me, and we need as much screen estate as possible to squeeze out my small monitor.
 
 #+begin_src emacs-lisp
+
   (add-to-list 'default-frame-alist '(undecorated-round . t))
+
 #+end_src
 
 ** Enable transparency
 I like seeing my wallpapers.
 
 #+begin_src emacs-lisp
+
   (set-frame-parameter (selected-frame) 'alpha '(85 . 85))
   (add-to-list 'default-frame-alist '(alpha . (85 . 85)))
+
 #+end_src
 
 ** Add small margins around the frame
 Add some breathing room for the text.
 
 #+begin_src emacs-lisp
+
   (modify-all-frames-parameters '((internal-border-width . 8)))
+
 #+end_src
 
 ** Enable hl-line-mode
 Enable global hl mode. Dark themes with low contract like the one I'm using make it hard to locate the cursor.
 
 #+begin_src emacs-lisp
-(global-hl-line-mode)
+
+  (global-hl-line-mode)
+
+#+end_src
+
+** Other minor tweaks
+An assortment of other minor tweaks to Emacs UI.
+
+#+begin_src emacs-lisp
+
+(blink-cursor-mode -1)        ; Steady cursor
+(pixel-scroll-precision-mode) ; Smooth scrolling
+
 #+end_src
 
 * WHICH-KEY
 In Emacs 30, which-key was integrated into Emacs as a minor mode. We don't need to use use-package here, and almost all config remains the same as it was with separate package.
 
 #+begin_src emacs-lisp
+
   (setq which-key-sort-order #'which-key-key-order-alpha
         which-key-sort-uppercase-first nil
         which-key-add-column-padding 1
@@ -917,10 +962,12 @@ In Emacs 30, which-key was integrated into Emacs as a minor mode. We don't need 
         which-key-separator " → ")
   (which-key-mode 1)
   (which-key-setup-side-window-bottom)
+
   ;; Fix which-key overlapping with minibuffer
   (defun fix-which-key--show-popup (orig-fn act-popup-dim)
     (let ((height (car act-popup-dim))
           (width  (cdr act-popup-dim)))
       (funcall orig-fn (cons (+ height 1) width))))
   (advice-add 'which-key--show-popup :around #'fix-which-key--show-popup)
+
 #+end_src

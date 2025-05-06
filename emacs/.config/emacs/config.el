@@ -40,48 +40,30 @@
 (elpaca elpaca-use-package
   (elpaca-use-package-mode))
 
+(use-package auto-package-update
+  :ensure t
+  :custom
+  (auto-package-update-interval 7)
+  (auto-package-update-delete-old-versions t)
+  (auto-package-update-hide-results t)
+  (auto-package-update-prompt-before-update t)
+  :config
+  (auto-package-update-maybe))
+
 (setopt use-package-hook-name-suffix nil)
+
+(unbind-key "C-z")
 
 (use-package general
   :ensure t
   :demand t
   :config
-  (general-evil-setup t)
-
   ;; Set up ',' as the global leader key
   (general-create-definer tl/leader
     :states '(normal insert visual emacs)
     :keymaps 'override
     :prefix ","
     :global-prefix "M-,")
-
-  ;; Apropos
-  (tl/leader
-   "a" '(:ignore t :wk "apropos")
-   "a a" '(apropos :wk "apropos all")
-   "a c" '(apropos-command :wk "apropos command")
-   "a d" '(apropos-documentation :wk "apropos docstring")
-   "a l" '(apropos-library :wk "apropos in library")
-   "a v" '(apropos-value :wk "apropos by value"))
-
-  ;; Buffers
-  (tl/leader
-   "b" '(:ignore t :wk "buffer")
-   "b b" '(switch-to-buffer :wk "switch to buffer")
-   "b i" '(ibuffer :wk "ibuffer")
-   "b k" '(kill-current-buffer :wk "kill buffer")
-   "b n" '(next-buffer :wk "next buffer")
-   "b p" '(previous-buffer :wk "previous buffer")
-   "b r" '(revert-buffer :wk "revert buffer"))
-
-  ;; Evaluation
-  (tl/leader
-   "e" '(:ignore t :wk "evaluate")
-   "e b" '(eval-buffer :wk "eval buffer")
-   "e d" '(eval-defun :wk "eval defun")
-   "e e" '(eval-expression :wk "eval expession")
-   "e l" '(eval-last-sexp :wk "eval expression before point")
-   "e r" '(eval-region :wk "eval region"))
 
   ;; Files
   (tl/leader
@@ -96,41 +78,12 @@
 	       (load-file "~/.config/emacs/init.el"))
 	     :wk "reload config"))
 
-  ;; Help
-  (tl/leader
-   "h" '(:ignore t :wk "help")
-   "h f" '(describe-function :wk "describe function")
-   "h v" '(describe-variable :wk "describe variable")
-   "h m" '(describe-mode :wk "describe mode")
-   "h c" '(describe-command :wk "describe command")
-   "h k" '(describe-key :wk "describe key"))
-
-  ;; Shells
-  (tl/leader
-   "s" '(:ignore t :wk "shell")
-   "s s" '(eshell :wk "eshell"))
-
   ;; Toggles
   (tl/leader
    "t" '(:ignore t :wk "toggle")
    "t l" '(display-line-numbers-mode :wk "line numbers")
    "t r" '(visual-line-mode :wk "truncated lines")
-   "t t" '(org-tidy-toggle :wk "org property drawers"))
-
-  ;; Windows
-  (tl/leader
-   "w" '(:ignore t :wk "windows")
-   ;; Window splits
-   "w c" '(evil-window-delete :wk "close window")
-   "w n" '(evil-window-new :wk "new window")
-   "w s" '(evil-window-split :wk "horizontal split")
-   "w v" '(evil-window-vsplit :wk "vertical split")
-   ;; Window motions
-   "w h" '(evil-window-left :wk "window left")
-   "w j" '(evil-window-down :wk "window down")
-   "w k" '(evil-window-up :wk "window up")
-   "w l" '(evil-window-right :wk "window right")
-   "w w" '(evil-window-next :wk "goto next window")))
+   "t t" '(org-tidy-toggle :wk "org property drawers")))
 
 (setq user-full-name "Teia Lesuten")
 (setq user-mail-address "teia.leusten@proton.me")
@@ -161,10 +114,9 @@
 
 (use-package rainbow-delimiters
   :ensure t
-  :defer t
   :hook
-  (prog-mode . rainbow-delimiters-mode)
-  (org-mode . rainbow-delimiters-mode))
+  (prog-mode-hook . rainbow-delimiters-mode)
+  (org-mode-hook . rainbow-delimiters-mode))
 
 (use-package dashboard
   :ensure t
@@ -225,14 +177,12 @@
   (setq denote-excluded-directories-regexp nil)
   (setq denote-excluded-keywords-regexp nil)
   (setq denote-rename-confirmations '(rewrite-front-matter modify-file-name))
-  ;; Pick dates, where relevant, with Org's advanced interface:
   (setq denote-date-prompt-use-org-read-date t)
-  ;; Automatically rename Denote buffers using the `denote-rename-buffer-format'.
   (denote-rename-buffer-mode 1))
 
 (use-package denote-menu
   :ensure t
-  :bind 
+  :bind
   (:map global-map
     ("C-c n a" . list-denotes)))
 
@@ -288,7 +238,7 @@ Each CONTENT string will have a newline appended automatically."
           "  :PROPERTIES:\n"
           "  :auto-expand: body\n"
           "  :END:\n\n"
-          "* GOALS\n"
+          "* goals\n"
           "%?\n\n"))
 
 (with-eval-after-load 'org-capture
@@ -348,30 +298,27 @@ Each CONTENT string will have a newline appended automatically."
    :states 'normal
    "C-c c" 'org-capture))
 
-;; Show trailing whitespace.
-(setq show-trailing-whitespace t)
-;; Use trash-cli rather than rm when deleting files.
-(setq delete-by-moving-to-trash t)
-;; Don't use double space to demarkate sentences.
-(setq sentence-end-double-space nil)
+(setq show-trailing-whitespace t)    ;; Show trailing whitespace.
+(setq delete-by-moving-to-trash t)   ;; Use trash-cli rather than rm when deleting files.
+(setq sentence-end-double-space nil) ;; Don't use double space to demarkate sentences.
 
 ;; keep backup and save files in a dedicated directory
 (setq backup-directory-alist
       `((".*" . ,(file-name-concat user-emacs-directory "backups")))
       auto-save-file-name-transforms
       `((".*" ,(file-name-concat user-emacs-directory "backups") t)))
+
 ;; Backup by copying file. The safest and also the slowest aproach.
 (setq backup-by-copying t)
+
 ;; Do more backups.
 (setq delete-old-versions t
       kept-new-versions 6
       kept-old-versions 2
       version-control t)
 
-;; Use a temp file as a placeholder
-  (setq custom-file (make-temp-file ""))
-;; Mark all themes as safe, since we can't persist now
-(setq custom-safe-themes t)
+(setq custom-file (make-temp-file "")) ;; Use a temp file as a placeholder.
+(setq custom-safe-themes t)            ;; Mark all themes as safe, since we can't persist now.
 
 (set-charset-priority 'unicode)
 (setq locale-coding-system 'utf-8
@@ -388,25 +335,35 @@ Each CONTENT string will have a newline appended automatically."
 
 (use-package evil
   :ensure t
-  :init ;; tweak evil's configuration before loading it
-  (setq evil-want-integration t)
-  (setq evil-want-keybinding nil)
-  (setq evil-vsplit-window-right t)
-  (setq evil-split-window-below t)
+
+  :init
   (setq evil-respect-visual-line-mode t)
-  (setq evil-want-C-u-scroll nil)
-  (setq evil-want-C-d-scroll nil)
-  (setq evil-want-C-i-jump nil)
+  (setq evil-undo-system 'undo-redo)
+  (setq evil-want-C-i-jump nil)                        ;; Retain Emacs C-u.
+  (setq evil-toggle-key "C-`")                         ;; Because the deault C-z is to useful to use for evil toggle.
+
   :config
-  (evil-mode 1))
-(use-package evil-collection
-  :after evil
-  :ensure t
-  :config
-  (setq evil-collection-mode-list '(dashboard dired ibuffer))
-  (evil-collection-init))
-(use-package evil-tutor
-  :ensure t)
+  (evil-mode)
+
+  ;; Evil-states per major mode
+  (setq evil-default-state 'emacs)
+  (setq evil-normal-state-modes '(fundamental-mode
+                                  ssh-config-mode
+                                  conf-mode
+                                  prog-mode
+                                  text-mode
+                                  repos-mode
+                                  dired-mode))
+
+  ;; Minor mode evil states
+  (add-hook 'with-editor-mode-hook 'evil-insert-state)
+  (add-hook 'git-commit-setup-hook 'evil-insert-state) ;; Start editing Magit in insert state.
+  (evil-set-initial-state 'eat-mode 'emacs)           ;; Same for Eat.
+
+  ;; Return C-r to its proper state.
+  (define-key evil-insert-state-map (kbd "C-r") 'isearch-backward)
+  (define-key evil-normal-state-map (kbd "C-r") 'isearch-backward)
+  (define-key evil-visual-state-map (kbd "C-r") 'isearch-backward))
 
 (set-face-attribute 'default nil
   :font "Sarasa Term SC Nerd"
@@ -420,33 +377,38 @@ Each CONTENT string will have a newline appended automatically."
   :font "Sarasa Term SC Nerd"
   :height 160
   :weight 'medium)
+
 ;; Makes commented text italics.
 (set-face-attribute 'font-lock-comment-face nil
   :slant 'italic)
+
 ;; Adjust line spacing.
 (setq-default line-spacing 0.15)
 (setq-default line-height 1.15)
 
-(global-set-key (kbd "C-=") 'text-scale-increase)
-(global-set-key (kbd "C--") 'text-scale-decrease)
+(global-set-key (kbd "C-M-=") 'text-scale-increase)
+(global-set-key (kbd "C-M--") 'text-scale-decrease)
 (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
 (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
 
 (use-package nerd-icons
   :ensure t)
+
 ;; ibuffer
 (use-package nerd-icons-ibuffer
   :ensure t
   :after nerd-icons
   :config
   (add-hook 'ibuffer-mode-hook #'nerd-icons-ibuffer-mode))
+
 ;; dired
 (use-package nerd-icons-dired
   :ensure t
   :after nerd-icons
   :config
   (add-hook 'dired-mode-hook #'nerd-icons-dired-mode))
-;; completions
+
+;; Completions
 (use-package nerd-icons-completion
   :ensure t
   :config
@@ -456,7 +418,8 @@ Each CONTENT string will have a newline appended automatically."
   :ensure t
   :config (mood-line-mode))
 
-(add-hook 'org-mode-hook 'org-indent-mode)
+(with-eval-after-load 'org
+  (add-hook 'org-mode-hook 'org-indent-mode))
 
 (use-package toc-org
   :ensure t
@@ -464,12 +427,25 @@ Each CONTENT string will have a newline appended automatically."
 
 ;; Disable greying out DONE headlines.
 (setq org-fontify-done-headline nil)
+
 ;; Automatically set parent item to DONE when children are all DONE.
 (defun org-summary-todo (n-done n-not-done)
   "Switch entry to DONE when all subentries are done, to TODO otherwise."
   (let (org-log-done org-todo-log-states)   ; turn off logging
     (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
 (add-hook 'org-after-todo-statistics-hook #'org-summary-todo)
+
+;; Define default TODO states. Per-buffer settings will be set in the file header when required.
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "STARTED(s!)" "WAIT(w/!)" "|" "DONE(d!)")))
+
+(setq org-log-into-drawer t) ;; Put state changes with timestamps into the drawer.
+(setq org-log-done nil)      ;; The output doesn't go into drawer so I just disable it.
+
+;; Set faces for some TODO states.
+(setq org-todo-keyword-faces
+      '(("STARTED" . "#EBCB8B")
+        ("WAIT" . "#D08770")))
 
 (use-package org-auto-tangle
   :ensure t
@@ -496,6 +472,12 @@ Each CONTENT string will have a newline appended automatically."
   :config
   (org-auto-expand-mode))
 
+(use-package doc-view
+  :custom
+  (doc-view-resolution 300)
+  (doc-view-mupdf-use-svg t)
+  (large-file-warning-threshold (* 150 (expt 2 20))))
+
 (use-package eshell-syntax-highlighting
   :ensure t
   :after esh-mode
@@ -521,12 +503,15 @@ Each CONTENT string will have a newline appended automatically."
 (use-package doom-themes
   :ensure t
   :config
-  ;; Global settings (defaults)
+
+  ;; No bold, but italic is ok.
   (setq doom-themes-enable-bold nil
         doom-themes-enable-italic t)
+
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config)
   (load-theme 'doom-nord-aurora :noconfirm)
+
   ;; Disable bold globally.
   (mapc
    (lambda (face)
@@ -558,6 +543,9 @@ Each CONTENT string will have a newline appended automatically."
 
 (global-hl-line-mode)
 
+(blink-cursor-mode -1)        ; Steady cursor
+(pixel-scroll-precision-mode) ; Smooth scrolling
+
 (setq which-key-sort-order #'which-key-key-order-alpha
       which-key-sort-uppercase-first nil
       which-key-add-column-padding 1
@@ -571,6 +559,7 @@ Each CONTENT string will have a newline appended automatically."
       which-key-separator " → ")
 (which-key-mode 1)
 (which-key-setup-side-window-bottom)
+
 ;; Fix which-key overlapping with minibuffer
 (defun fix-which-key--show-popup (orig-fn act-popup-dim)
   (let ((height (car act-popup-dim))

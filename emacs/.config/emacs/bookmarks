@@ -1,11 +1,11 @@
-;;;; Emacs Bookmark Format Version 1;;;; -*- coding: utf-8-emacs; mode: lisp-data -*-
+;;;; Emacs Bookmark Format Version 1;;;; -*- coding: utf-8; mode: lisp-data -*-
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
 (("org-capture-last-stored"
- (filename . "~/Forge/teial/areas/20250502T152915--nardo__area.org")
- (front-context-string . "#+title:      Na")
+ (filename . "~/Forge/teial/areas/20250503T161645--emacs__area.org")
+ (front-context-string . "#+title:      Em")
  (rear-context-string)
  (position . 1)
- (last-modified 26644 47781 857864 0))
+ (last-modified 26646 5955 449158 0))
 )
