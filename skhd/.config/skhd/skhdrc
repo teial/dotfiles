@@ -1,0 +1,4 @@
+cmd - o : open -a /Applications/Obsidian.app
+cmd - b : open -a /Applications/Zen.app
+cmd - g : open -a /Applications/Ghostty.app
+cmd - t : open -a /Applications/Telegram.app
