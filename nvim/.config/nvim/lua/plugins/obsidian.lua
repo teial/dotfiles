@@ -6,6 +6,27 @@ return {
     dependencies = {
         "nvim-lua/plenary.nvim",
     },
+    keys = {
+        {
+            "<leader>oc",
+            function()
+                return require("obsidian").util.toggle_checkbox()
+            end,
+            desc = "toggle checkbox",
+        },
+        { "<leader>od", "<cmd>ObsidianToday<CR>", desc = "today" },
+        { "<leader>oy", "<cmd>ObsidianToday -1<CR>", desc = "yesterday" },
+        { "<leader>om", "<cmd>ObsidianToday 1<CR>", desc = "tomorrow" },
+        { "<leader>on", "<cmd>ObsidianNew<CR>", desc = "new note" },
+        { "<leader>op", "<cmd>Obsidian new_from_template<CR>", desc = "new from template" },
+        { "<leader>ob", "<cmd>ObsidianBacklinks<CR>", desc = "backlinks" },
+        { "<leader>os", "<cmd>ObsidianSearch<CR>", desc = "search" },
+        { "<leader>ot", "<cmd>ObsidianTags<CR>", desc = "tags" },
+        { "<leader>oq", "<cmd>ObsidianQuickSwitch<CR>", desc = "quick switch" },
+        { "<leader>oq", "<cmd>ObsidianWorkspace<CR>", desc = "workspace" },
+        { "<leader>oll", "<cmd>Obsidian link<CR>", desc = "link", mode = { "n", "v" } },
+        { "<leader>oln", "<cmd>Obsidian link_new<CR>", desc = "link new", mode = { "n", "v" } },
+    },
     opts = {
         completion = {
             nvim_cmp = true,
@@ -20,10 +41,12 @@ return {
         workspaces = {
             {
                 name = "teial",
-                path = "~/Forge/teial",
+                path = "~/Forge/Vault",
                 overrides = {
+                    notes_subdir = "0. Fleeting",
+                    new_notes_location = "notes_subdir",
                     daily_notes = {
-                        folder = "1-daily",
+                        folder = "0. Journal",
                         template = "daily.md",
                     },
                 },
@@ -44,7 +67,7 @@ return {
             },
         },
         templates = {
-            folder = "0-system/templates",
+            folder = "0. Templates",
         },
         mappings = {
             ["<cr>"] = {
@@ -52,48 +75,6 @@ return {
                     return require("obsidian").util.gf_passthrough()
                 end,
                 opts = { buffer = true, expr = true },
-            },
-            ["<leader>oc"] = {
-                action = function()
-                    return require("obsidian").util.toggle_checkbox()
-                end,
-                opts = { buffer = true, desc = "toggle checkbox" },
-            },
-            ["<leader>od"] = {
-                action = "<cmd>ObsidianToday<CR>",
-                opts = { buffer = true, desc = "today" },
-            },
-            ["<leader>oy"] = {
-                action = "<cmd>ObsidianToday -1<CR>",
-                opts = { buffer = true, desc = "yesterday" },
-            },
-            ["<leader>om"] = {
-                action = "<cmd>ObsidianToday 1<CR>",
-                opts = { buffer = true, desc = "tomorrow" },
-            },
-            ["<leader>on"] = {
-                action = "<cmd>ObsidianNew<CR>",
-                opts = { buffer = true, desc = "new note" },
-            },
-            ["<leader>ob"] = {
-                action = "<cmd>ObsidianBacklinks<CR>",
-                opts = { buffer = true, desc = "backlinks" },
-            },
-            ["<leader>os"] = {
-                action = "<cmd>ObsidianSearch<CR>",
-                opts = { buffer = true, desc = "search" },
-            },
-            ["<leader>ot"] = {
-                action = "<cmd>ObsidianTags<CR>",
-                opts = { buffer = true, desc = "tags" },
-            },
-            ["<leader>oq"] = {
-                action = "<cmd>ObsidianQuickSwitch<CR>",
-                opts = { buffer = true, desc = "quick switch" },
-            },
-            ["<leader>ow"] = {
-                action = "<cmd>ObsidianWorkspace<CR>",
-                opts = { buffer = true, desc = "workspace" },
             },
         },
         follow_url_func = function(url)
@@ -104,7 +85,6 @@ return {
                 print(url)
             end
             vim.fn.jobstart({ "open", url }) -- Mac OS
-            -- vim.fn.jobstart({"xdg-open", url})  -- linux
         end,
     },
 }
