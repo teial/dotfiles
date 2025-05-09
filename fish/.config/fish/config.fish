@@ -3,6 +3,7 @@ set fish_greeting
 set fish_color_valid_path
 
 . $fish_path/aliases.fish
+. $fish_path/openai.fish
 
 # Set XDG paths.
 set -gx XDG_CONFIG_HOME "$HOME/.config"
