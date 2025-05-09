@@ -9,7 +9,9 @@ return {
                 {
                     mode = { "n", "v" },
                     { "<leader>o", group = "obsidian", icon = { icon = "💎" } },
-                    { "<leader>t", group = "gtd", icon = { icon = "📆" } },
+                    { "<leader>ol", group = "links" },
+                    { "<leader>oj", group = "journal" },
+                    { "<leader>on", group = "note" },
                     { "<leader>gc", group = "conflicts" },
                 },
             },
