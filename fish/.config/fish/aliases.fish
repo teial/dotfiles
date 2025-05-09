@@ -5,3 +5,4 @@ alias la="eza -la --icons=always --color=always --git --header --group-directori
 alias lt="eza --tree --level 2 --icons=always --color=always --git --header --group-directories-first"
 alias cat="bat"
 alias emacs="emacs -nw"
+alias v="nvim"
