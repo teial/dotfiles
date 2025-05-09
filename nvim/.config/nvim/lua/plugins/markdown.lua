@@ -13,7 +13,7 @@ return {
         code = {
             width = "block",
             border = "thin",
-            min_width = 45,
+            min_width = 80,
             left_pad = 2,
             right_pad = 4,
             language_pad = 2,
