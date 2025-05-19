@@ -4,10 +4,10 @@
     signingkey = 39AE94EEDBF345EF
 
 [commit]
-	gpgsign = true
+	gpgSign = true
 
 [include]
-    path = ~/Forge/.gitconfig
+    path = ~/Drive/.gitconfig
     path = ~/.config/delta/themes/catppuccin.gitconfig
 
 [pull]
