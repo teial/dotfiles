@@ -12,6 +12,7 @@ return {
             end,
             sources = {
                 explorer = {
+                    enter = false,
                     layout = {
                         layout = {
                             box = "vertical",

@@ -6,9 +6,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
             Snacks.explorer.open()
         elseif #argv == 1 then
             local arg = argv[1]
-            if vim.fn.isdirectory(arg) == 1 then
-                Snacks.explorer.open()
-            end
+            if vim.fn.isdirectory(arg) == 1 then Snacks.explorer.open() end
         end
     end,
 })
@@ -19,9 +17,7 @@ vim.api.nvim_create_autocmd({ "BufWinLeave", "BufWritePost", "WinLeave" }, {
     desc = "Save view with mkview for real files",
     group = persistent_folds,
     callback = function(args)
-        if vim.b[args.buf].view_activated then
-            vim.cmd.mkview({ mods = { emsg_silent = true } })
-        end
+        if vim.b[args.buf].view_activated then vim.cmd.mkview({ mods = { emsg_silent = true } }) end
     end,
 })
 vim.api.nvim_create_autocmd("BufWinEnter", {
@@ -49,4 +45,13 @@ vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHo
 vim.api.nvim_create_autocmd({ "FileChangedShellPost" }, {
     pattern = "*",
     command = "echohl WarningMsg | echo 'File changed on disk. Buffer reloaded.' | echohl None",
+})
+
+-- Disable diagnostics for markdown, everywhere, forever.
+vim.api.nvim_create_autocmd("LspAttach", {
+    callback = function(args)
+        local bufnr = args.buf
+        local ft = vim.bo[bufnr].filetype
+        if ft == "markdown" then vim.diagnostic.enable(false) end
+    end,
 })

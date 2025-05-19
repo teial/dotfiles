@@ -9,6 +9,7 @@ return {
             "hrsh7th/cmp-path",
             "onsails/lspkind.nvim",
             "Arkissa/cmp-agda-symbols",
+            "supermaven-inc/supermaven-nvim",
         },
         opts = function()
             local lspkind = require("lspkind")
@@ -17,11 +18,11 @@ return {
             return {
                 auto_brackets = {}, -- configure any filetype to auto add brackets
                 sources = cmp.config.sources({
+                    { name = "supermaven", group_index = 1, priority = 100 }, -- Supermaven
                     { name = "async-path" }, -- filesystem paths
                     { name = "lazydev" }, -- faster LuaLS completions
                     { name = "nvim_lsp", keyword_length = 1 }, -- LSP completions
                     { name = "agda-symbols", keyword_length = 1 }, -- Agda symbols
-                    -- { name = "copilot", keyword_length = 3 }, -- GitHub Copilot
                 }, {
                     { name = "buffer" }, -- completions from the current buffer
                 }),

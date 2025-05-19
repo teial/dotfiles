@@ -3,9 +3,7 @@
 local function save_fleeting()
     local client = require("obsidian").get_client()
     local picker = client:picker()
-    if not picker then
-        return
-    end
+    if not picker then return end
 
     -- Get title from the user
     local util = require("obsidian.util")
@@ -19,14 +17,20 @@ local function save_fleeting()
     local notes_subdir = client.current_workspace.overrides.notes_subdir
     picker:find_templates({
         callback = function(name)
-            if name == nil or name == "" then
-                return
-            end
+            if name == nil or name == "" then return end
             ---@type obsidian.Note
             local note = client:create_note({ title = title, template = name, dir = notes_subdir, no_write = false })
             client:open_note(note, { sync = false })
         end,
     })
+end
+
+local function insert_note_id()
+    local client = require("obsidian").get_client()
+    local id = client:new_note_id()
+    local pos = vim.api.nvim_win_get_cursor(0)[2]
+    local line = vim.api.nvim_get_current_line()
+    vim.api.nvim_put({ id }, "b", true, true)
 end
 
 return {
@@ -40,18 +44,11 @@ return {
     keys = {
         {
             "<leader>oc",
-            function()
-                return require("obsidian").util.toggle_checkbox()
-            end,
+            function() return require("obsidian").util.toggle_checkbox() end,
             desc = "toggle checkbox",
         },
-        {
-            "<leader>onf",
-            function()
-                save_fleeting()
-            end,
-            desc = "new fleeting note",
-        },
+        { "<leader>oi", function() insert_note_id() end, desc = "insert id" },
+        { "<leader>onf", function() save_fleeting() end, desc = "new fleeting note" },
         { "<leader>onn", "<cmd>ObsidianNew<CR>", desc = "new note" },
         { "<leader>onp", "<cmd>Obsidian new_from_template<CR>", desc = "new from template" },
         { "<leader>ont", "<cmd>Obsidian template<CR>", desc = "insert template" },
@@ -85,22 +82,20 @@ return {
         },
         workspaces = {
             {
-                name = "teial",
-                path = "~/Forge/Vault",
+                name = "Vault",
+                path = "~/Drive/Vault",
                 overrides = {
-                    notes_subdir = "0. Fleeting",
+                    notes_subdir = "0-fleeting",
                     new_notes_location = "current_dir",
                     daily_notes = {
-                        folder = "0. Journal",
+                        folder = "0-journal",
                         template = "daily.md",
                     },
                 },
             },
             {
                 name = "buf-parent",
-                path = function()
-                    return assert(vim.fs.dirname(vim.api.nvim_buf_get_name(0)))
-                end,
+                path = function() return assert(vim.fs.dirname(vim.api.nvim_buf_get_name(0))) end,
                 overrides = {
                     notes_subdir = vim.NIL,
                     new_notes_location = "current_dir",
@@ -112,16 +107,31 @@ return {
             },
         },
         templates = {
-            folder = "0. Templates",
+            folder = "0-templates",
         },
         mappings = {
-            ["<cr>"] = {
+            ["<CR>"] = {
                 action = function()
-                    return require("obsidian").util.gf_passthrough()
+                    local util = require("obsidian.util")
+                    if util.cursor_on_markdown_link(nil, nil, true) then vim.cmd("ObsidianFollowLink") end
+                    if util.cursor_tag(nil, nil) then vim.cmd("ObsidianTags") end
+                    if util.cursor_heading() then vim.cmd("za") end
+                    util.toggle_checkbox()
                 end,
-                opts = { buffer = true, expr = true },
+                opts = { buffer = true, expr = false },
             },
         },
+        -- Don't use aliases in the frontmatter.
+        note_frontmatter_func = function(note)
+            local out = { id = note.id, aliases = {}, tags = note.tags }
+            if note.metadata ~= nil and not vim.tbl_isempty(note.metadata) then
+                for k, v in pairs(note.metadata) do
+                    out[k] = v
+                end
+            end
+            return out
+        end,
+        -- Open local file from relative paths.
         follow_url_func = function(url)
             local path = url:match("^file://(.+)")
             if path then
