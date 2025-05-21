@@ -51,4 +51,10 @@ return {
             }
         end,
     },
+    {
+        "supermaven-inc/supermaven-nvim",
+        opts = {
+            ignore_filetypes = { "markdown" },
+        },
+    },
 }

@@ -10,6 +10,7 @@ return {
                 return {
                     WinSeparator = { fg = "#51597d" },
                     LineNr = { fg = "#61637d" },
+                    CmpItemKindSupermaven = { fg = "#ffffff" },
                 }
             end,
             integrations = {
