@@ -113,24 +113,19 @@ return {
             ["<CR>"] = {
                 action = function()
                     local util = require("obsidian.util")
-                    if util.cursor_on_markdown_link(nil, nil, true) then vim.cmd("ObsidianFollowLink") end
-                    if util.cursor_tag(nil, nil) then vim.cmd("ObsidianTags") end
-                    if util.cursor_heading() then vim.cmd("za") end
-                    util.toggle_checkbox()
+                    if util.cursor_on_markdown_link(nil, nil, true) then
+                        vim.cmd("ObsidianFollowLink")
+                    elseif util.cursor_tag(nil, nil) then
+                        vim.cmd("ObsidianTags")
+                    elseif util.cursor_heading() then
+                        vim.cmd("za")
+                    else
+                        util.toggle_checkbox()
+                    end
                 end,
                 opts = { buffer = true, expr = false },
             },
         },
-        -- Don't use aliases in the frontmatter.
-        note_frontmatter_func = function(note)
-            local out = { id = note.id, aliases = {}, tags = note.tags }
-            if note.metadata ~= nil and not vim.tbl_isempty(note.metadata) then
-                for k, v in pairs(note.metadata) do
-                    out[k] = v
-                end
-            end
-            return out
-        end,
         -- Open local file from relative paths.
         follow_url_func = function(url)
             local path = url:match("^file://(.+)")

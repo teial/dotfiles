@@ -9,6 +9,7 @@ return {
             custom_highlights = function()
                 return {
                     WinSeparator = { fg = "#51597d" },
+                    LineNr = { fg = "#61637d" },
                 }
             end,
             integrations = {
