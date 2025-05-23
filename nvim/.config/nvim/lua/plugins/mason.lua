@@ -4,7 +4,6 @@ return {
         ensure_installed = {
             "markdownlint-cli2",
             "markdown-toc",
-            "codelldb",
         },
     },
 }

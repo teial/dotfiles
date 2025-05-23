@@ -46,12 +46,3 @@ vim.api.nvim_create_autocmd({ "FileChangedShellPost" }, {
     pattern = "*",
     command = "echohl WarningMsg | echo 'File changed on disk. Buffer reloaded.' | echohl None",
 })
-
--- Disable diagnostics for markdown, everywhere, forever.
-vim.api.nvim_create_autocmd("LspAttach", {
-    callback = function(args)
-        local bufnr = args.buf
-        local ft = vim.bo[bufnr].filetype
-        if ft == "markdown" then vim.diagnostic.enable(false) end
-    end,
-})
