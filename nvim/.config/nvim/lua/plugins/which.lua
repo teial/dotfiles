@@ -2,12 +2,11 @@ return {
     {
         "folke/which-key.nvim",
         opts = {
-            delay = function(ctx)
-                return 0
-            end,
+            delay = function(ctx) return 0 end,
             spec = {
                 {
                     mode = { "n", "v" },
+                    { "<leader>a", group = "goose" },
                     { "<leader>o", group = "obsidian", icon = { icon = "💎" } },
                     { "<leader>ol", group = "links" },
                     { "<leader>oj", group = "journal" },

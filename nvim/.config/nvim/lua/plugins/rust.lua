@@ -35,7 +35,7 @@ return {
                             maxLength = 15,
                         },
                         rustfmt = {
-                            extraArgs = { "--config", "max_width=120" },
+                            extraArgs = { "+nightly" },
                         },
                         procMacro = {
                             enable = true,

@@ -4,10 +4,7 @@ return {
         ft = { "markdown", "Avante" },
         opts = {
             file_types = { "markdown", "Avante" },
-            indent = {
-                enabled = true,
-                per_level = 4,
-            },
+            indent = { enabled = false },
             sign = { enabled = true },
             heading = {
                 backgrounds = {},
@@ -30,13 +27,5 @@ return {
         cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
         ft = { "markdown" },
         build = function() vim.fn["mkdp#util#install"]() end,
-    },
-    {
-        "neovim/nvim-lspconfig",
-        opts = {
-            servers = {
-                marksman = {},
-            },
-        },
     },
 }

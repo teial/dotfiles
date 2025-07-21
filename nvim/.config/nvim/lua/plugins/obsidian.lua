@@ -85,10 +85,10 @@ return {
                 name = "Vault",
                 path = "~/Drive/Vault",
                 overrides = {
-                    notes_subdir = "fleeting",
+                    notes_subdir = "0-fleeting",
                     new_notes_location = "current_dir",
                     daily_notes = {
-                        folder = "journal",
+                        folder = "0-journal",
                         template = "daily.md",
                     },
                 },
@@ -107,7 +107,7 @@ return {
             },
         },
         templates = {
-            folder = "templates",
+            folder = "0-templates",
         },
         mappings = {
             ["<CR>"] = {
