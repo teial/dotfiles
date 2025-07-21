@@ -2,3 +2,4 @@ cmd - b : open -a /Applications/Zen.app
 cmd - y : open -a /Applications/Ghostty.app
 cmd - m : open -a /Applications/Telegram.app
 cmd - g : open -a /Applications/ChatGPT.app
+cmd - e : open -a /Applications/Emacs.app
