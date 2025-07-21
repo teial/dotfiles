@@ -53,6 +53,9 @@ if status is-interactive
     # Java setup.
     fish_add_path -gP /opt/homebrew/opt/openjdk/bin
 
+    # Go setup.
+    set -gx GOPATH "$XDG_TOOL_HOME/go"
+
     # Set up doom emacs.
     fish_add_path -gP "$XDG_CONFIG_HOME/emacs/bin"
 
