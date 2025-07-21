@@ -2,10 +2,16 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("org-capture-last-stored"
- (filename . "~/Forge/teial/areas/20250503T161645--emacs__area.org")
- (front-context-string . "#+title:      Em")
+(("org-refile-last-stored"
+ (filename . "~/Drive/skill/20250709T170853--japanese__skill.org")
+ (front-context-string . "** TODO A new ta")
+ (rear-context-string . " TASKS\n* HABITS\n")
+ (position . 325)
+ (last-modified 26735 51738 35130 0))
+("org-capture-last-stored"
+ (filename . "~/Drive/projects/20250721T191322--create-personalized-emacs-configuration__project.org")
+ (front-context-string . "#+title:      Cr")
  (rear-context-string)
  (position . 1)
- (last-modified 26646 5955 449158 0))
+ (last-modified 26750 26405 406620 0))
 )
