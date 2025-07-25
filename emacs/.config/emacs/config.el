@@ -74,6 +74,14 @@
                 (load-file "~/.config/emacs/init.el"))
               :wk "reload config"))
 
+  ;; Buffers
+  (tl/leader
+    "b" '(:ignore t :wk "buffers")
+    "b s" '(mode-line-other-buffer :wk "swap recent")
+    "b i" '(ibuffer :wk "ibuffer")
+    "b b" '(switch-to-buffer :wk "switch")
+    "b k" '(kill-buffer :wk "kill"))
+
   ;; Files
   (tl/leader
     "f" '(:ignore t :wk "files")
@@ -95,8 +103,13 @@
     "o l" '(org-insert-link :wk "link")
     "o s" '(org-schedule :wk "schedule")
     "o d" '(org-deadline :wk "deadline")
-    "o h" '(tl/org-make-habit :wk "habit")
-    "o r" '(tl/refile-from-inbox :wk "refile")
+    "o h" '(:ignore t :wk "effort")
+    "o e e" '(org-set-effort :wk "set effort")
+    "o e r" '(tl/org-register-pomodoro :wk "register pomodoro")
+    "o h" '(:ignore t :wk "habits")
+    "o h h" '(tl/org-make-habit :wk "new habit")
+    "o h p" '(tl/org-postpone-habit-by-one-day :wk "postpone")
+    "o f" '(tl/refile-from-inbox :wk "refile")
     "o c" '(org-capture :wk "capture")
     "o r" '((lambda () (interactive) (org-update-statistics-cookies t) (org-agenda-redo-all)) :wk "refresh"))
 
@@ -123,11 +136,30 @@
     "d j j" '(denote-journal-new-or-existing-entry :wk "new or existing")
     "d j l" '(denote-journal-link-or-create-entry :wk "link or create"))
 
+  ;; Emacs help system
+  (tl/leader
+    "h" '(:ignore t :wk "help")
+    "h q" '(help-quick-toggle :wk "quick help")
+    "h i" '(info :wk "info")
+    "h d" '(:ignore t :wk "describe")
+    "h d m" '(describe-mode :wk " mode")
+    "h d x" '(desctibe-command :wk "command")
+    "h d f" '(describe-function :wk "function")
+    "h d v" '(desctibe-variable :wk "variable")
+    "h d k" '(desctribe-key :wk "key")
+    "h a" '(:ignore t :wk "apropos")
+    "h a a" '(apropos :wk "all")
+    "h a c" '(apropos-command :wk "commands")
+    "h a d" '(apropos-documentation :wk "docstrings")
+    "h a l" '(apropos-library :wk "library")
+    "h a v" '(apropos-value :wk "value"))
+
   ;; Toggles
   (tl/leader
     "t" '(:ignore t :wk "toggle")
     "t l" '(display-line-numbers-mode :wk "line numbers")
     "t r" '(visual-line-mode :wk "truncated lines")
+    "t m" '(global-visible-mark-mode :wk "visible marks")
     "t t" '(org-tidy-toggle :wk "org property drawers")))
 
 (setq user-full-name "Teia Lesuten")
@@ -150,6 +182,9 @@
   :ensure t
   :hook
   (prog-mode-hook . rainbow-delimiters-mode))
+
+(use-package cider
+  :ensure t)
 
 (use-package vertico
   :ensure t
@@ -271,7 +306,6 @@
     Each CONTENT string will have a newline appended automatically."
   (concat (tl/front-matter-header category)
           (mapconcat #'identity contents "\n")
-	  "\n"
           tl/front-matter-footer
           "\n"))
 
@@ -373,6 +407,35 @@
                (denote-use-keywords '("channel"))
                (denote-use-template tl/channel-template)
                (denote-org-front-matter tl/channel-front-matter)
+               (denote-org-capture-specifiers nil))
+           (denote-org-capture)))
+     :no-save t
+     :immediate-finish nil
+     :kill-buffer t
+     :jump-to-captured t)))
+
+(defvar tl/game-front-matter
+  (tl/assemble-front-matter "resource"
+   "#+url:        %%^{URL}"))
+
+(defvar tl/game-template
+  (concat "* TABLE OF CONTENTS :toc:\n"
+          "  :PROPERTIES:\n"
+          "  :auto-expand: body\n"
+          "  :END:\n\n"
+          "* GUIDES\n"
+          "%?\n\n"))
+
+(with-eval-after-load 'org-capture
+  (add-to-list
+   'org-capture-templates
+   '("g" "Game" plain
+     (file denote-last-path)
+     #'(lambda ()
+         (let ((denote-use-directory tl/org-resources-path)
+               (denote-use-keywords '("game"))
+               (denote-use-template tl/game-template)
+               (denote-org-front-matter tl/game-front-matter)
                (denote-org-capture-specifiers nil))
            (denote-org-capture)))
      :no-save t
@@ -509,6 +572,7 @@
 (setq show-trailing-whitespace t)    ;; Show trailing whitespace.
 (setq delete-by-moving-to-trash t)   ;; Use trash-cli rather than rm when deleting files.
 (setq sentence-end-double-space nil) ;; Don't use double space to demarkate sentences.
+(setq debug-on-error t)              ;; I'd rather prefer my Emacs config has no errors.
 
 ;; keep backup and save files in a dedicated directory
 (setq backup-directory-alist
@@ -656,7 +720,7 @@
 
 (with-eval-after-load 'org
   (setq org-habit-show-habits-only-for-today nil) ;; Show habits on all relevant view, not just today's view
-  (setq org-habit-graph-column t)
+  (setq org-habit-graph-column 120)
   (setq org-habit-preceding-days 15)
   (setq org-habit-following-days 5))
 
@@ -679,13 +743,84 @@ Prompts for :TOD: (Morning, Afternoon, Evening) and :REPEAT_TO_STATE:."
                      org-todo-keywords-1 nil t nil nil current-state)))
     ;; Set only SCHEDULED with repeater
     (org-schedule nil (concat date-str " " repeater))
-    (org-set-property "STYLE" "Habit")
-    (unless (string-empty-p repeat-to)
+    (org-set-property "STYLE" "habit")
+    (unless (string= repeat-to "TODO")
       (org-set-property "REPEAT_TO_STATE" repeat-to))
     (unless (string-empty-p tod)
       (org-set-property "TOD" tod))
     (message "Habit set to repeat every %s from %s, TOD: %s, returning to state: %s"
              interval date-str (if (string-empty-p tod) "unspecified" tod) repeat-to)))
+
+(defun tl/org-postpone-habit-by-one-day ()
+  "Postpone the current habit by one day (i.e., reschedule to tomorrow)."
+  (interactive)
+  (unless (org-entry-get (point) "STYLE")
+    (user-error "Not a habit (missing STYLE property)"))
+  (save-excursion
+    (let* ((current (org-get-scheduled-time (point)))
+           (new (time-add current (days-to-time 1))))
+      (org-schedule nil (format-time-string (org-time-stamp-format nil t) new))
+      (message "Habit postponed to %s" (format-time-string "%Y-%m-%d" new)))))
+
+(defun tl/org-agenda-postpone-habit ()
+  "Postpone the habit at point in the agenda by one day, without opening its buffer."
+  (interactive)
+  (let ((marker (or (org-get-at-bol 'org-hd-marker)
+                    (user-error "No item at point"))))
+    (save-window-excursion
+      (org-with-point-at marker
+        (org-with-wide-buffer
+          (unless (string= (org-entry-get (point) "STYLE") "habit")
+            (user-error "Not a habit"))
+          (let* ((current (org-get-scheduled-time (point)))
+                 (new (time-add current (days-to-time 1))))
+            (org-schedule nil (format-time-string (org-time-stamp-format nil t) new))))))
+    (org-agenda-redo)))
+
+  (with-eval-after-load 'org-agenda
+    (define-key org-agenda-mode-map (kbd "P") #'tl/org-agenda-postpone-habit))
+
+(defun tl/org-set-pomodoro-on-effort (&rest _)
+  "Set Pomodoro to 0 if Effort was just set and Pomodoro is not yet present."
+  (when (and (org-entry-get (point) "Effort") ; effort just got set
+             (not (org-entry-get (point) "Pomodoro")))
+    (org-entry-put (point) "Pomodoro" "0")))
+
+(advice-add 'org-set-effort :after #'tl/org-set-pomodoro-on-effort)
+
+(defun tl/org-register-pomodoro ()
+  "Increment the Pomodoro count for a valid repeating TODO entry.
+Works in both Org buffers and Agenda buffers."
+  (interactive)
+  (let ((marker (or (org-get-at-bol 'org-hd-marker)
+                    (point-marker)))) ; fallback for non-agenda
+    (with-current-buffer (marker-buffer marker)
+      (save-excursion
+        (goto-char marker)
+        (unless (org-before-first-heading-p)
+          (org-back-to-heading t)
+          (let ((todo-state (org-get-todo-state))
+                (effort (org-entry-get (point) "Effort"))
+                (repeat (org-get-repeat)))
+            (if (and todo-state effort repeat)
+                (let* ((done (string-to-number (or (org-entry-get (point) "Pomodoro") "0")))
+                       (new (1+ done)))
+                  (org-entry-put (point) "Pomodoro" (number-to-string new))
+                  (message "Pomodoro: %d → %d" done new))
+              (user-error "This entry is not a repeating TODO with Effort")))))))
+  (when (derived-mode-p 'org-agenda-mode)
+    (org-agenda-maybe-redo)))
+
+(with-eval-after-load 'org-agenda
+  (define-key org-agenda-mode-map (kbd "R") #'tl/org-register-pomodoro))
+
+(defun tl/org-reset-pomodoro-on-repeat ()
+  "Reset the Pomodoro property to 0 when a repeating task is rescheduled,
+but only if the property already exists."
+  (when (org-entry-get (point) "Pomodoro")
+    (org-entry-put (point) "Pomodoro" "0")))
+
+(add-hook 'org-todo-repeat-hook #'tl/org-reset-pomodoro-on-repeat)
 
 (setq org-agenda-files (list tl/org-projects-path tl/org-areas-path tl/org-resources-path))
 (setq org-agenda-window-setup 'only-window)     ;; agenda takes whole window
@@ -694,11 +829,38 @@ Prompts for :TOD: (Morning, Afternoon, Evening) and :REPEAT_TO_STATE:."
 (setq org-agenda-dim-blocked-tasks nil)         ;; Don't hide blocked subtasks
 (setq org-agenda-show-inherited-tags t)         ;; Show inherited tags (optional)
 (setq org-agenda-sticky t)                      ;; Optional: keep custom view until replaced
+(setq org-agenda-show-inherited-tags nil)       ;; Don't really use them.
 (setq org-tags-match-list-sublevels t)
+
+(add-hook 'org-agenda-mode-hook (lambda () (display-line-numbers-mode -1)))
 
 (with-eval-after-load 'org-agenda
   (define-key org-agenda-mode-map (kbd "j") 'org-agenda-next-item)
   (define-key org-agenda-mode-map (kbd "k") 'org-agenda-previous-item))
+
+(defun tl/org-agenda-compare-by-tod (a b)
+  "Compare Org agenda entries A and B by their TOD property.
+Returns -1 if A < B, +1 if A > B, nil if equal."
+  (let* ((order '("Morning" "Afternoon" "Evening"))
+         (get-tod (lambda (x)
+                    (or (org-entry-get (get-text-property 0 'org-marker x) "TOD" t)
+                        "")))
+         (a-tod (funcall get-tod a))
+         (b-tod (funcall get-tod b))
+         (a-idx (or (cl-position a-tod order :test #'string=) (length order)))
+         (b-idx (or (cl-position b-tod order :test #'string=) (length order))))
+    (cond
+     ((< a-idx b-idx) -1)
+     ((> a-idx b-idx) +1)
+     (t nil))))
+
+(setq org-agenda-cmp-user-defined #'tl/org-agenda-compare-by-tod)
+
+(setq org-agenda-sorting-strategy
+      '((agenda user-defined-up priority-down time-up)
+      (todo user-defined-up priority-down category-keep)
+      (tags user-defined-up)
+      (search user-defined-up)))
 
 (defun tl/org-get-title (&optional max-length)
   "Return the #+title of the org file corresponding to the current agenda entry.
@@ -709,51 +871,82 @@ If MAX-LENGTH is given and the title is longer, truncate it and append '...'."
       title)))
 
 (defun tl/org-get-tod-tag ()
-  "Return a short tag string for the TOD property of the current Org entry.
-[M] for Morning, [N] for Afternoon, [E] for Evening, and \"\" if none."
-  (let ((tod (org-entry-get nil "TOD" t)))
-    (pcase (and tod (downcase tod))
-      ("morning" "[M]")
-      ("afternoon" "[N]")
-      ("evening" "[E]")
-      (_ ""))))
+  "Return TOD property if present and entry is a habit.
+If not a habit, return scheduled date string if scheduled.
+Otherwise, return an empty string."
+  (let ((style (org-entry-get nil "STYLE"))
+        (tod (org-entry-get nil "TOD" t))
+        (scheduled-time (org-get-scheduled-time nil)))
+    (if (and style (string= style "habit"))
+        (or tod "")
+      (if scheduled-time
+          (format-time-string "%Y-%m-%d" scheduled-time)
+        ""))))
 
-(defun tl/org-agenda-compare-by-tod (a b)
-  "Compare two agenda items A and B by their :TOD: property."
-  (let* ((tod-order '("Morning" "Afternoon" "Evening"))
-         (get-tod (lambda (x)
-                    (or (org-entry-get (get-text-property 1 'org-marker x) "TOD") "")))
-         (index-a (cl-position (funcall get-tod a) tod-order :test #'string=))
-         (index-b (cl-position (funcall get-tod b) tod-order :test #'string=)))
-    ;; nil values are treated as after all known TODs
-    (setq index-a (or index-a (length tod-order)))
-    (setq index-b (or index-b (length tod-order)))
-    (< index-a index-b)))
-
-;(setq org-agenda-cmp-user-defined #'tl/org-agenda-compare-by-tod)
-
-;(setq org-agenda-sorting-strategy
-;      '((agenda user-defined-up priority-down time-up)
-;      (todo user-defined-up priority-down category-keep)
-;      (tags user-defined-up)
-;      (search user-defined-up)))
+(defun tl/org-effective-level ()
+  "Return the effective TODO level of the current heading.
+  Effective level counts the number of TODO ancestors up to the first non-TODO heading."
+  (save-excursion
+    (let ((level 1)
+          (done nil))
+      (while (and (not done) (org-up-heading-safe))
+        (if (member (org-get-todo-state) org-todo-keywords-1)
+            (setq level (1+ level))
+          (setq done t)))
+      (when (member (org-get-todo-state) org-todo-keywords-1)
+        (setq level (1+ level)))
+      level)))
 
 (defun tl/org-agenda-indent ()
-  "Return an ASCII-style indent like └─ if parent has a TODO keyword."
+  "Return ASCII-style indent like └─ based on effective TODO level."
+  (let ((level (tl/org-effective-level)))
+    (if (> level 1)
+        (concat (make-string (* (1- level) 2) ?\s) "└─ ")
+      "  ")))
+
+(defun tl/org-effort-string ()
+  "Return a string like '1/3' showing Pomodoro progress.
+Assumes Effort is a number of pomodoros and Pomodoro is completed count."
+  (let* ((effort (string-to-number (or (org-entry-get (point) "Effort") "0")))
+         (done   (string-to-number (or (org-entry-get (point) "Pomodoro") "0"))))
+    (if (> effort 0)
+        (format "%d/%d" done effort)
+      "")))
+
+(defun tl/org-agenda-entry-has-body-p ()
+  "Return non-nil if the Org entry at point in source buffer has body text (excluding drawers and planning lines)."
+  (org-with-point-at (org-get-at-bol 'org-hd-marker)
+    (save-excursion
+      (org-back-to-heading t)
+      (let ((end (save-excursion (org-end-of-subtree t t)))
+            (found nil))
+        (forward-line)
+        (while (and (not found) (< (point) end))
+          (let ((line (string-trim (thing-at-point 'line t))))
+            (unless (or (string-empty-p line)
+                        (looking-at-p org-planning-line-re)
+                        (looking-at-p org-property-drawer-re)
+                        (looking-at-p org-logbook-drawer-re)
+                        (looking-at-p org-clock-drawer-re))
+              (setq found t)))
+          (forward-line))
+        found))))
+
+(defun tl/org-agenda-annotate-body-indicator ()
+  "Append ! to agenda lines that have body content."
   (save-excursion
-    (let ((level (or (org-current-level) 0)))
-      (cond
-       ((<= level 1) "    ") ; 4 spaces for top-level alignment
-       (t
-        (org-up-heading-safe)
-        (if (member (org-get-todo-state) org-todo-keywords-1)
-            ;; Add spaces to align to (level - 1), then └─
-            (let ((spaces (* (1- level) 2))) ; 2 spaces per depth level
-              (concat (make-string spaces ?\s) "└─ "))
-          "    "))))))
+    (goto-char (point-min))
+    (while (not (eobp))
+      (let ((marker (get-text-property (point) 'org-hd-marker)))
+      (when (and marker (tl/org-agenda-entry-has-body-p))
+        (end-of-line)
+        (insert " [...]")))
+      (org-agenda-next-line))))
+
+(add-hook 'org-agenda-finalize-hook #'tl/org-agenda-annotate-body-indicator)
 
 (defvar tl/org-agenda-custom-format
-   "  %-12c %?-12t %-35(tl/org-get-title 30) %(tl/org-get-tod-tag) %(tl/org-agenda-indent)")
+   "  %-12c  ┆  %-35(tl/org-get-title 30)  ┆  %-10(tl/org-get-tod-tag)  ┆  %-3(tl/org-effort-string)  ┆  %(tl/org-agenda-indent)")
 
 (setq org-agenda-prefix-format
       `((agenda . ,tl/org-agenda-custom-format)
@@ -766,40 +959,79 @@ If MAX-LENGTH is given and the title is longer, truncate it and append '...'."
   :config
   (org-super-agenda-mode t))
 
+(defvar tl/org-agenda-todays-view
+  '(
+    ;; Show habits and tasks.
+    (agenda "" ((org-agenda-overriding-header "HABITS")
+              (org-agenda-span 'day)
+              (org-super-agenda-groups
+                 '(;; Habits
+                   (:name "Morning"
+                          :property ("TOD" "Morning")
+                          :order 1)
+                   (:name "Afternoon"
+                          :property ("TOD" "Afternoon")
+                          :order 2)
+                   (:name "Evening"
+                          :property ("TOD" "Evening")
+                          :order 3)
+                   ;; Other groups go here.
+                   (:discard (:anything t))
+                   ))))
+    ;; Show all daily tasks.
+    (todo "" ((org-agenda-overriding-header "TASKS")
+              (org-super-agenda-groups
+                 '(;; Projects
+                   (:discard (:habit t))
+                   (:name "One-off tasks"
+                          :and (:category ("area" "project") :todo "TODO" :not (:scheduled future))
+                          :order 1)
+                   (:name "Waiting"
+                          :and (:category ("area" "project") :todo "WAIT")
+                          :order 2)
+                   (:name "Upcoming"
+                          :scheduled future
+                          :order 3)
+                   ;; Discard everything else.
+                   (:discard (:anything t))
+                   ;; Other groups go here.
+                   ))))
+    ;; Other sections go here.
+    ))
+
+(defvar tl/org-agenda-resources-view
+  '(
+    ;; Show habits and tasks.
+    (agenda "" ((org-agenda-overriding-header "AGENDA")
+              (org-agenda-span 'day)
+              (org-super-agenda-groups
+                 '(;; Habits
+                   (:discard (:property "TOD"))
+                   (:discard (:not (:category "project")))
+                   (:name "Active Projects"
+                          :scheduled today
+                          :scheduled past
+                          :order 4)
+                   ;; Other groups go here.
+                   (:discard (:anything t))
+                   ))))
+    ;; Show tasks from projects I'm currently working in.
+    (alltodo "" ((org-agenda-overriding-header "RESOURCES")
+                 (org-super-agenda-groups
+                  '(;; Projects
+                    (:name "Active resources"
+                           :and (:category "resource" :todo ("STARTED" "PAUSED" "NEXT"))
+                           :order 1)
+                    ;; Discard everything else.
+                    (:discard (:anything t))
+                    ;; Other groups go here.
+                    ))))
+    ;; Other sections go here.
+    ))
+
 (setq org-agenda-custom-commands
-      ;; Today's view include habits and tasks scheduled for today, as well as currently worked projects.
-      '(("d" "Today"
-         ;; Show habits and tasks.
-         ((agenda "" ((org-agenda-overriding-header "")
-                      (org-agenda-span 'day)
-                      (org-super-agenda-groups
-                       '(;; Habits
-                       (:name "Habits"
-                              :habit t
-                              :scheduled today
-                              :order 1)
-                       ;; Scheduled tasks
-                       (:name "Tasks"
-                              :scheduled today
-                              :order 2)
-                       ;; Other groups go here.
-                       (:discard (:anything t))
-                       ))))
-          ;; Show tasks from projects I'm currently working in.
-          (alltodo "" ((org-agenda-overriding-header "")
-                       (org-super-agenda-groups
-                        '(;; Projects
-                          (:name "Resources"
-                                 :and (:category "resource" :todo ("STARTED" "PAUSED" "NEXT"))
-                                 :order 3)
-                          ;; Discard everything else.
-                          (:discard (:anything t))
-                          ;; Other groups go here.
-                          ))))
-          ;; Other sections go here.
-          ))
-        ;; Other views go here.
-        ))
+      `(("d" "Today" ,tl/org-agenda-todays-view)
+        ("r" "Resources" ,tl/org-agenda-resources-view)))
 
 ;; Disable greying out DONE headlines.
 (setq org-fontify-done-headline nil)
@@ -811,8 +1043,8 @@ If MAX-LENGTH is given and the title is longer, truncate it and append '...'."
          "PROJECT(r)"
 	 "NEXT(n!)"
 	 "STARTED(s!)"
-	 "PAUSE(p!)"
-	 "WAIT(w@)"
+	 "PAUSED(p!)"
+	 "WAIT(w!)"
 	 "SOMEDAY(s!)"
 	 "|"
 	 "DONE(d!)"
@@ -826,6 +1058,7 @@ If MAX-LENGTH is given and the title is longer, truncate it and append '...'."
       '(("PROJECT" . "#8959a8")
         ("NEXT" . "#c82829")
         ("STARTED" . "#f5871f")
+        ("PAUSED" . "#eab700")
         ("WAIT" . "#d08770")
         ("SOMEDAY" . "#4271ae")
         ("CANCELLED" . "#eab700")))
@@ -851,44 +1084,54 @@ If MAX-LENGTH is given and the title is longer, truncate it and append '...'."
 (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
 
 (defun tl/org-promote-next-sibling-when-done ()
-  "When a heading is marked DONE, set the next sibling to NEXT, if it has no children."
+  "When a heading is marked DONE, promote the next sibling or its first child to NEXT.
+
+If the next sibling is a TODO and not a habit:
+- If it has no children, promote it to NEXT.
+- If it has children, promote its first child to NEXT (assumes it's a TODO)."
   (when (string= org-state "DONE")
     (save-excursion
       (let ((pos (point)))
         (when (org-get-next-sibling)
-          (let ((next-state (org-get-todo-state)))
-            ;; Check if next sibling has children
-            (save-excursion
-              (if (org-goto-first-child)
-                  ;; Has children — do nothing
-                  nil
-                ;; No children — promote to NEXT if it's a not-done state
-                (when (and next-state (string= next-state "TODO"))
-                  (org-todo "NEXT")))))
-          (goto-char pos))))))
+          (let ((next-state (org-get-todo-state))
+                (style (org-entry-get nil "STYLE")))
+            (unless (and style (string= style "habit"))
+              (save-excursion
+                (if (org-goto-first-child)
+                    ;; Has children: promote first child
+                    (org-todo "NEXT")
+                  ;; No children: promote sibling
+                  (when (and next-state (string= next-state "TODO"))
+                    (org-todo "NEXT")))))))
+        (goto-char pos)))))
 
 (add-hook 'org-after-todo-state-change-hook
-            #'tl/org-promote-next-sibling-when-done)
+          #'tl/org-promote-next-sibling-when-done)
+
+(defun tl/get-description-at-point ()
+  (interactive)
+  (let ((link (org-element-context)))
+    (message "%s" (buffer-substring (org-element-property :contents-begin link)
+                                    (org-element-property :contents-end link)))))
 
 (defun tl/org-log-started-task-in-journal ()
-  "When a TODO changes from NEXT to STARTED, log a line in today's journal."
+  "When a TODO changes from PROJECT to STARTED, log a line in today's journal."
   (when (and (string= org-state "STARTED")
-             (string= org-last-state "NEXT"))
+             (string= org-last-state "PROJECT"))
     (let* ((source-file buffer-file-name)
-           (link-description (or (cadar (org-collect-keywords '("TITLE"))) "No title"))
+           (link-description (tl/get-description-at-point))
            (journal-file (denote-journal-path-to-new-or-existing-entry)))
       (with-current-buffer (find-file-noselect journal-file)
-      (goto-char (point-min))
-      (re-search-forward "^\\* ACTIVITY LOG")
-      (org-end-of-subtree t nil)
-      (unless (bolp) (insert "\n"))
-      (insert "** Working on ")
-      (denote-link source-file nil link-description)
-      (insert "\n")
-      (save-buffer)))))
+        (goto-char (point-min))
+        (re-search-forward "^\\* ACTIVITY LOG")
+        (org-end-of-subtree t nil)
+        (unless (bolp) (insert "\n"))
+        (insert "** Working on ")
+        (denote-link source-file nil link-description)
+        (insert "\n")
+        (save-buffer)))))
 
-(add-hook 'org-after-todo-state-change-hook
-          #'tl/org-log-started-task-in-journal)
+(add-hook 'org-after-todo-state-change-hook #'tl/org-log-started-task-in-journal)
 
 (setq org-capture-templates
       `(("i" "Inbox task" entry
@@ -910,7 +1153,7 @@ If MAX-LENGTH is given and the title is longer, truncate it and append '...'."
   set to TODO, and the destination is opened after the operation."
   (interactive)
   (let* ((base-dir tl/org-path)
-         (category (completing-read "Refile to: " '("area" "project")))
+         (category (completing-read "Refile to: " '("areas" "projects")))
          (target-dir (expand-file-name category base-dir))
          (org-files (directory-files target-dir t "\\.org$"))
          ;; Map file title → file path
@@ -981,7 +1224,8 @@ If MAX-LENGTH is given and the title is longer, truncate it and append '...'."
 
 (with-eval-after-load 'org
   (require 'org-tempo)
-  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp")))
+  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+  (add-to-list 'org-structure-template-alist '("cl" . "src clojure")))
 
 (use-package org-tidy
   :ensure t

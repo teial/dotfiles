@@ -3,15 +3,15 @@
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
 (("org-refile-last-stored"
- (filename . "~/Drive/skill/20250709T170853--japanese__skill.org")
- (front-context-string . "** TODO A new ta")
- (rear-context-string . " TASKS\n* HABITS\n")
- (position . 325)
- (last-modified 26735 51738 35130 0))
+ (filename . "~/Drive/areas/20250725T115536--it-alliance__area.org")
+ (front-context-string . "** TODO Set rele")
+ (rear-context-string . " HABITS\n* TASKS\n")
+ (position . 345)
+ (last-modified 26755 18118 43102 0))
 ("org-capture-last-stored"
- (filename . "~/Drive/projects/20250721T191322--create-personalized-emacs-configuration__project.org")
- (front-context-string . "#+title:      Cr")
- (rear-context-string)
- (position . 1)
- (last-modified 26750 26405 406620 0))
+ (filename . "~/Drive/journal/20250725T011336--friday-25-july-2025__journal.org")
+ (front-context-string . "* ACTIVITY LOG\n\n")
+ (rear-context-string . "OMPLETED TASKS\n\n")
+ (position . 380)
+ (last-modified 26755 38757 394677 0))
 )
